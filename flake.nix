@@ -6,12 +6,14 @@
     naersk.url = "github:nix-community/naersk";
   };
 
-  outputs = { nixpkgs, naersk, ... }:
+  outputs =
+    { nixpkgs, naersk, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       naerskLib = pkgs.callPackage naersk { };
-    in {
+    in
+    {
       packages.${system}.default = naerskLib.buildPackage {
         src = ./.;
         buildInputs = [ pkgs.openssl ];
@@ -28,10 +30,7 @@
 
           openssl
 
-          yarn
           nodejs
-          pnpm
-          # nodePackages.typescript
           nodePackages.eslint
           nodePackages.prettier
           nodePackages.typescript-language-server
