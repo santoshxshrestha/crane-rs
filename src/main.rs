@@ -2,7 +2,7 @@
 use actix_files::Files;
 use actix_web::HttpResponse;
 use actix_web::Responder;
-use actix_web::{self, App, HttpServer, get};
+use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 
 #[derive(Template)]
@@ -25,13 +25,21 @@ async fn index() -> impl Responder {
         .body(template.render().unwrap())
 }
 
+#[post("/upload")]
+async fn upload() -> impl Responder {
+    HttpResponse::Ok().body("Upload content")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("🚀 Starting server at http://127.0.0.1:8080/");
-    HttpServer::new(move || App::new()
-        .service(index)
-        .service(Files::new("/static", "./static").show_files_listing()))
-        .bind("127.0.0.1:8080")?
-        .run()
+    HttpServer::new(move || {
+        App::new()
+            .service(index)
+            .service(upload)
+            .service(Files::new("/static", "./static").show_files_listing())
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
     .await
 }
