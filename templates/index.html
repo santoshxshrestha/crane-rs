@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>crane.rs</title>
     <link rel="stylesheet" href="/static/styles/style.css" />
-</head>
+  </head>
 
-<body>
-    <h1>{{ content }}</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
+  <body>
+    <div>
+      <h1>{{ content }}</h1>
+      <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="file" required />
         <button type="submit">Upload</button>
-    </form>
-</body>
-
+      </form>
+    </div>
+  </body>
 </html>
