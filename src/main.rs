@@ -1,5 +1,6 @@
 #![allow(unused)]
 use actix_files::Files;
+use actix_multipart::Multipart;
 use actix_web::HttpResponse;
 use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
@@ -26,7 +27,8 @@ async fn index() -> impl Responder {
 }
 
 #[post("/upload")]
-async fn upload() -> impl Responder {
+async fn upload(mut payload: Multipart) -> impl Responder {
+    println!("Received upload request");
     HttpResponse::Ok().body("Upload content")
 }
 
