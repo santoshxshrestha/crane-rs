@@ -10,6 +10,7 @@ use local_ip_address::local_ip;
 use qr2term::print_qr;
 use std::fs;
 use std::io;
+use webbrowser::open;
 
 mod cli;
 use cli::Args;
@@ -83,6 +84,11 @@ async fn main() -> std::io::Result<()> {
 
     let local_ip = local_ip().unwrap();
     print_qr(&format!("http://{}:{}/", local_ip, port)).unwrap();
+
+    if let Err(e) = open(&format!("http://{}:{}/", local_ip, port)) {
+        eprintln!("Failed to open web browser: {}", e);
+    }
+
     println!("Server running at http://{}:{}/", local_ip, port);
 
     HttpServer::new(move || {
