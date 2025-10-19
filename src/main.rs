@@ -23,7 +23,7 @@ impl IndexTemplate {
 
 #[get("/")]
 async fn index() -> impl Responder {
-    let template = IndexTemplate::new("Hello, Askama with Actix-web!".to_string());
+    let template = IndexTemplate::new("crane-rs".to_string());
     HttpResponse::Ok()
         .content_type("text/html")
         .body(template.render().unwrap())
