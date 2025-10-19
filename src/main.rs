@@ -6,6 +6,8 @@ use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 use serde::Deserialize;
+use std::fs;
+use std::io::Write;
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -34,6 +36,17 @@ pub struct UploadForm {
 
 #[post("/upload")]
 async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
+    fs::create_dir_all("/home/santosh/Downloads/crane-rs").unwrap();
+
+    let file_name = if let Some(file_name) = &form.file.file_name {
+        file_name.clone()
+    } else {
+        "uploaded_file".to_string()
+    };
+
+    let file_path = format!("/home/santosh/Downloads/crane-rs/{}", file_name);
+    let mut f = fs::File::create(&file_path).unwrap();
+
     println!("Received upload request");
     if let Some(file) = form.file.file_name {
         println!("File name: {:?}", file);
