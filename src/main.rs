@@ -5,7 +5,10 @@ use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 use dirs_next::home_dir;
+use local_ip_address::local_ip;
+use qr2term::print_qr;
 use std::fs;
+use std::io;
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -60,7 +63,7 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
     let mut f = fs::File::create(&file_path).unwrap();
     let mut temp_file = form.file.file;
 
-    std::io::copy(&mut temp_file, &mut f).unwrap();
+    io::copy(&mut temp_file, &mut f).unwrap();
 
     if let Some(file) = form.file.file_name {
         println!("File name: {:?}", file);
@@ -70,14 +73,16 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("🚀 Starting server at http://127.0.0.1:8080/");
+    let local_ip = local_ip().unwrap();
+    print_qr(&format!("http://{}:8080/", local_ip)).unwrap();
+
     HttpServer::new(move || {
         App::new()
             .service(index)
             .service(upload)
             .service(Files::new("/static", "./static").show_files_listing())
     })
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8080")?
     .run()
     .await
 }
