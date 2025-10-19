@@ -8,7 +8,7 @@
   </head>
   <body>
     {% for file in files %} {{ file }}
-    <a href="/download/{{ file }}">Download</a>
+    <a href="{{ file }}" download>Download</a>
     <br />
     {% endfor %}
   </body>
