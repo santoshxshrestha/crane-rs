@@ -1,3 +1,4 @@
+#![allow(unused)]
 use actix_files::Files;
 use actix_multipart::form::{MultipartForm, json::Json, tempfile::TempFile};
 use actix_web::HttpResponse;
@@ -26,21 +27,17 @@ async fn index() -> impl Responder {
         .body(template.render().unwrap())
 }
 
-#[derive(Debug, Deserialize)]
-pub struct Metadata {
-    pub name: String,
-}
-
-#[derive(MultipartForm)]
+#[derive(MultipartForm, Debug)]
 pub struct UploadForm {
     pub file: TempFile,
-    pub metadata: Json<Metadata>,
 }
 
 #[post("/upload")]
 async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
     println!("Received upload request");
-    println!("Metadata: {:?}", form.metadata);
+    if let Some(file) = form.file.file_name {
+        println!("File name: {:?}", file);
+    }
     HttpResponse::Ok().body("Upload content")
 }
 
