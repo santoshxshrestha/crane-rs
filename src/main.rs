@@ -1,10 +1,10 @@
-#![allow(unused)]
 use actix_files::Files;
-use actix_multipart::Multipart;
+use actix_multipart::form::{MultipartForm, json::Json, tempfile::TempFile};
 use actix_web::HttpResponse;
 use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
+use serde::Deserialize;
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -26,9 +26,21 @@ async fn index() -> impl Responder {
         .body(template.render().unwrap())
 }
 
+#[derive(Debug, Deserialize)]
+pub struct Metadata {
+    pub name: String,
+}
+
+#[derive(MultipartForm)]
+pub struct UploadForm {
+    pub file: TempFile,
+    pub metadata: Json<Metadata>,
+}
+
 #[post("/upload")]
-async fn upload(mut payload: Multipart) -> impl Responder {
+async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
     println!("Received upload request");
+    println!("Metadata: {:?}", form.metadata);
     HttpResponse::Ok().body("Upload content")
 }
 
