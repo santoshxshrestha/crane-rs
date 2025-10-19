@@ -4,6 +4,7 @@ use actix_web::HttpResponse;
 use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
+use dirs_next::home_dir;
 use std::fs;
 
 #[derive(Template)]
@@ -34,7 +35,16 @@ pub struct UploadForm {
 #[post("/upload")]
 async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
     println!("Received upload request");
-    if let Err(e) = fs::create_dir_all("/home/santosh/Downloads/crane-rs") {
+
+    let home_directory = match home_dir() {
+        Some(path) => path,
+        None => {
+            eprintln!("Could not determine home directory");
+            return HttpResponse::InternalServerError().body("Could not determine home directory");
+        }
+    };
+
+    if let Err(e) = fs::create_dir_all(home_directory.join("Downloads/crane-rs")) {
         eprintln!("Failed to create directory: {}", e);
         return HttpResponse::InternalServerError().body("Failed to create directory");
     }
