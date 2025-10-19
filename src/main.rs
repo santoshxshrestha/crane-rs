@@ -36,7 +36,11 @@ pub struct UploadForm {
 
 #[post("/upload")]
 async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
-    fs::create_dir_all("/home/santosh/Downloads/crane-rs").unwrap();
+    println!("Received upload request");
+    if let Err(e) = fs::create_dir_all("/home/santosh/Downloads/crane-rs") {
+        eprintln!("Failed to create directory: {}", e);
+        return HttpResponse::InternalServerError().body("Failed to create directory");
+    }
 
     let file_name = if let Some(file_name) = &form.file.file_name {
         file_name.clone()
@@ -45,9 +49,12 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
     };
 
     let file_path = format!("/home/santosh/Downloads/crane-rs/{}", file_name);
-    let mut f = fs::File::create(&file_path).unwrap();
 
-    println!("Received upload request");
+    let mut f = fs::File::create(&file_path).unwrap();
+    let mut temp_file = form.file.file;
+
+    std::io::copy(&mut temp_file, &mut f).unwrap();
+
     if let Some(file) = form.file.file_name {
         println!("File name: {:?}", file);
     }
