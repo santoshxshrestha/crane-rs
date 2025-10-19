@@ -2,6 +2,7 @@ use actix_files::Files;
 use actix_multipart::form::{MultipartForm, tempfile::TempFile};
 use actix_web::HttpResponse;
 use actix_web::Responder;
+use actix_web::web;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 use clap::Parser;
@@ -10,10 +11,40 @@ use local_ip_address::local_ip;
 use qr2term::print_qr;
 use std::fs;
 use std::io;
+use std::path::PathBuf;
+use std::sync::Arc;
+use std::sync::{Mutex, MutexGuard};
 use webbrowser::open;
 
 mod cli;
 use cli::Args;
+
+#[derive(Template)]
+#[template(path = "download.html")]
+struct DownloadTemplate {
+    files: Vec<String>,
+}
+
+impl DownloadTemplate {
+    fn new(files: Vec<PathBuf>) -> Self {
+        DownloadTemplate {
+            files: files
+                .into_iter()
+                .map(|path| path.to_string_lossy().to_string())
+                .collect(),
+        }
+    }
+}
+
+#[get("/download")]
+async fn download(data: web::Data<Arc<Mutex<Vec<PathBuf>>>>) -> impl Responder {
+    let files_lock: MutexGuard<Vec<PathBuf>> = data.lock().unwrap();
+    let files = files_lock.clone();
+    let template = DownloadTemplate::new(files);
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(template.render().unwrap())
+}
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -29,7 +60,7 @@ impl IndexTemplate {
 
 #[get("/")]
 async fn index() -> impl Responder {
-    let template = IndexTemplate::new("crane-rs".to_string());
+    let template = IndexTemplate::new("crane-rs - index".to_string());
     HttpResponse::Ok()
         .content_type("text/html")
         .body(template.render().unwrap())
@@ -81,6 +112,7 @@ async fn main() -> std::io::Result<()> {
     let args = Args::parse();
 
     let port = args.get_port();
+    let files = Arc::new(Mutex::new(args.get_files()));
 
     let local_ip = local_ip().unwrap();
     print_qr(&format!("http://{}:{}/", local_ip, port)).unwrap();
@@ -90,11 +122,14 @@ async fn main() -> std::io::Result<()> {
     }
 
     println!("Server running at http://{}:{}/", local_ip, port);
+    let cloned_files = Arc::clone(&files);
 
     HttpServer::new(move || {
         App::new()
             .service(index)
             .service(upload)
+            .service(download)
+            .app_data(web::Data::new(cloned_files.clone()))
             .service(Files::new("/static", "./static").show_files_listing())
     })
     .bind(format!("0.0.0.0:{}", port))?
