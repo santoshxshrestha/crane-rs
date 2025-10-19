@@ -1,13 +1,10 @@
-#![allow(unused)]
 use actix_files::Files;
-use actix_multipart::form::{MultipartForm, json::Json, tempfile::TempFile};
+use actix_multipart::form::{MultipartForm, tempfile::TempFile};
 use actix_web::HttpResponse;
 use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
-use serde::Deserialize;
 use std::fs;
-use std::io::Write;
 
 #[derive(Template)]
 #[template(path = "index.html")]
