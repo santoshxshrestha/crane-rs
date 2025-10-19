@@ -8,3 +8,4 @@ actix-files = "0.6.8"
 actix-multipart = { version = "0.7.2", features = ["derive"] }
 actix-web = "4.11.0"
 askama = "0.14.0"
+dirs-next = "2.0.0"
