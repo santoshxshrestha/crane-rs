@@ -9,7 +9,7 @@ actix-multipart = { version = "0.7.2", features = ["derive"] }
 actix-web = "4.11.0"
 askama = "0.14.0"
 clap = { version = "4.5.49", features = ["derive"] }
-dirs-next = "2.0.0"
 local-ip-address = "0.6.5"
 qr2term = "0.3.3"
+walkdir = "2.5.0"
 webbrowser = "1.0.6"

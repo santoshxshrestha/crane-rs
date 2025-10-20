@@ -2,18 +2,16 @@ use actix_files::Files;
 use actix_multipart::form::{MultipartForm, tempfile::TempFile};
 use actix_web::HttpResponse;
 use actix_web::Responder;
-use actix_web::web;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 use clap::Parser;
-use dirs_next::home_dir;
 use local_ip_address::local_ip;
 use qr2term::print_qr;
+use std::env;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
-use std::sync::Arc;
-use std::sync::{Mutex, MutexGuard};
+use walkdir::WalkDir;
 use webbrowser::open;
 
 mod cli;
@@ -77,9 +75,22 @@ impl DownloadTemplate {
 }
 
 #[get("/download")]
-async fn download_page(data: web::Data<Arc<Mutex<Vec<PathBuf>>>>) -> impl Responder {
-    let files_lock: MutexGuard<Vec<PathBuf>> = data.lock().unwrap();
-    let files = files_lock.clone();
+async fn download_page() -> impl Responder {
+    let tmp_dir = env::temp_dir().join("crane-rs");
+
+    if !tmp_dir.exists() {
+        return HttpResponse::NotFound().body("No files available for download");
+    }
+
+    let mut files = Vec::new();
+
+    for entry in WalkDir::new(&tmp_dir) {
+        let entry = entry.unwrap();
+        if entry.file_type().is_file() {
+            files.push(entry.path().to_path_buf())
+        }
+    }
+
     let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
     HttpResponse::Ok()
         .content_type("text/html")
@@ -114,16 +125,9 @@ pub struct UploadForm {
 #[post("/upload")]
 async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
     println!("Received upload request");
+    let tmp_dir = env::temp_dir();
 
-    let home_directory = match home_dir() {
-        Some(path) => path,
-        None => {
-            eprintln!("Could not determine home directory");
-            return HttpResponse::InternalServerError().body("Could not determine home directory");
-        }
-    };
-
-    if let Err(e) = fs::create_dir_all(home_directory.join("Downloads/crane-rs")) {
+    if let Err(e) = fs::create_dir_all(tmp_dir.join("crane-rs")) {
         eprintln!("Failed to create directory: {}", e);
         return HttpResponse::InternalServerError().body("Failed to create directory");
     }
@@ -134,7 +138,7 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
         "uploaded_file".to_string()
     };
 
-    let file_path = format!("/home/santosh/Downloads/crane-rs/{}", file_name);
+    let file_path = tmp_dir.join("crane-rs").join(&file_name);
 
     let mut f = fs::File::create(&file_path).unwrap();
     let mut temp_file = form.file.file;
@@ -147,12 +151,39 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
     HttpResponse::Ok().body("Upload content")
 }
 
+fn copy_files_to_temp(files: Vec<PathBuf>) -> std::io::Result<()> {
+    let tmp_dir = env::temp_dir().join("crane-rs");
+
+    if let Err(e) = fs::create_dir_all(&tmp_dir) {
+        eprintln!("Failed to create directory: {}", e);
+        return Err(e);
+    };
+
+    for file in files {
+        let file_name = file
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .to_string();
+        let dest_path = tmp_dir.join(&file_name);
+        fs::copy(&file, &dest_path)?;
+    }
+    Ok(())
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let args = Args::parse();
 
     let port = args.get_port();
-    let files = Arc::new(Mutex::new(args.get_files()));
+    let files = args.get_files();
+
+    if !files.is_empty() {
+        if let Err(e) = copy_files_to_temp(files.clone()) {
+            eprintln!("Failed to copy files to temp directory: {}", e);
+            return Err(e);
+        }
+    }
 
     let local_ip = local_ip().unwrap();
     print_qr(&format!("http://{}:{}/", local_ip, port)).unwrap();
@@ -162,7 +193,6 @@ async fn main() -> std::io::Result<()> {
     }
 
     println!("Server running at http://{}:{}/", local_ip, port);
-    let cloned_files = Arc::clone(&files);
 
     HttpServer::new(move || {
         App::new()
@@ -170,8 +200,8 @@ async fn main() -> std::io::Result<()> {
             .service(upload_page)
             .service(download_page)
             .service(upload)
-            .app_data(web::Data::new(cloned_files.clone()))
             .service(Files::new("/static", "./static").show_files_listing())
+            .service(Files::new("/tmp/crane-rs", "/tmp/crane-rs").show_files_listing())
     })
     .bind(format!("0.0.0.0:{}", port))?
     .run()
