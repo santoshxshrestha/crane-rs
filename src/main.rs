@@ -16,10 +16,12 @@ use webbrowser::open;
 
 mod cli;
 mod templates;
+mod utils;
 use cli::Args;
 use templates::download::DownloadTemplate;
 use templates::index::IndexTemplate;
 use templates::upload::UploadTemplate;
+use utils::store::copy_files_to_temp;
 
 #[get("/upload")]
 async fn upload_page() -> impl Responder {
@@ -102,26 +104,6 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
         println!("File name: {:?}", file);
     }
     HttpResponse::Ok().body("Upload content")
-}
-
-fn copy_files_to_temp(files: Vec<PathBuf>) -> std::io::Result<()> {
-    let tmp_dir = env::temp_dir().join("crane-rs");
-
-    if let Err(e) = fs::create_dir_all(&tmp_dir) {
-        eprintln!("Failed to create directory: {}", e);
-        return Err(e);
-    };
-
-    for file in files {
-        let file_name = file
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .to_string();
-        let dest_path = tmp_dir.join(&file_name);
-        fs::copy(&file, &dest_path)?;
-    }
-    Ok(())
 }
 
 #[actix_web::main]
