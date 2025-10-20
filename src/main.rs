@@ -19,6 +19,8 @@ mod routes;
 mod templates;
 mod utils;
 use cli::Args;
+use routes::download::download_page;
+use routes::index::index;
 use routes::upload::upload_page;
 use templates::download::DownloadTemplate;
 use templates::index::IndexTemplate;
@@ -33,37 +35,6 @@ impl FileInfo {
     pub fn new(name: String, file: String) -> Self {
         Self { name, file }
     }
-}
-
-#[get("/download")]
-async fn download_page() -> impl Responder {
-    let tmp_dir = env::temp_dir().join("crane-rs");
-
-    if !tmp_dir.exists() {
-        return HttpResponse::NotFound().body("No files available for download");
-    }
-
-    let mut files = Vec::new();
-
-    for entry in WalkDir::new(&tmp_dir) {
-        let entry = entry.unwrap();
-        if entry.file_type().is_file() {
-            files.push(entry.path().to_path_buf())
-        }
-    }
-
-    let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
-    HttpResponse::Ok()
-        .content_type("text/html")
-        .body(template.render().unwrap())
-}
-
-#[get("/")]
-async fn index() -> impl Responder {
-    let template = IndexTemplate::new("crane-rs - index".to_string());
-    HttpResponse::Ok()
-        .content_type("text/html")
-        .body(template.render().unwrap())
 }
 
 #[derive(MultipartForm, Debug)]
