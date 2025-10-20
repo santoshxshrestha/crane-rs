@@ -43,7 +43,17 @@ async fn upload_page() -> impl Responder {
 #[template(path = "download.html")]
 struct DownloadTemplate {
     content: String,
-    files: Vec<String>,
+    files: Vec<FileInfo>,
+}
+
+struct FileInfo {
+    name: String,
+    file: String,
+}
+impl FileInfo {
+    fn new(name: String, file: String) -> Self {
+        Self { name, file }
+    }
 }
 
 impl DownloadTemplate {
@@ -51,7 +61,15 @@ impl DownloadTemplate {
         DownloadTemplate {
             files: files
                 .into_iter()
-                .map(|path| path.to_string_lossy().to_string())
+                .map(|path| {
+                    let name = path
+                        .file_name()
+                        .unwrap_or_default()
+                        .to_string_lossy()
+                        .to_string();
+                    let file = path.to_string_lossy().to_string();
+                    FileInfo::new(name, file)
+                })
                 .collect(),
             content,
         }
