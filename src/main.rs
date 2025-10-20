@@ -6,9 +6,9 @@ use actix_web::web;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 use clap::Parser;
-use dirs_next::home_dir;
 use local_ip_address::local_ip;
 use qr2term::print_qr;
+use std::env;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
@@ -114,16 +114,9 @@ pub struct UploadForm {
 #[post("/upload")]
 async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
     println!("Received upload request");
+    let tmp_dir = env::temp_dir();
 
-    let home_directory = match home_dir() {
-        Some(path) => path,
-        None => {
-            eprintln!("Could not determine home directory");
-            return HttpResponse::InternalServerError().body("Could not determine home directory");
-        }
-    };
-
-    if let Err(e) = fs::create_dir_all(home_directory.join("Downloads/crane-rs")) {
+    if let Err(e) = fs::create_dir_all(tmp_dir.join("crane-rs")) {
         eprintln!("Failed to create directory: {}", e);
         return HttpResponse::InternalServerError().body("Failed to create directory");
     }
@@ -134,7 +127,7 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
         "uploaded_file".to_string()
     };
 
-    let file_path = format!("/home/santosh/Downloads/crane-rs/{}", file_name);
+    let file_path = tmp_dir.join("crane-rs").join(&file_name);
 
     let mut f = fs::File::create(&file_path).unwrap();
     let mut temp_file = form.file.file;
