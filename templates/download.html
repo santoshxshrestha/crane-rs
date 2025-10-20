@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>crane.rs - download</title>
-    <link rel="stylesheet" href="/static/styles/download.css" />
+    <link rel="stylesheet" href="/static/styles/style.css" />
   </head>
   <body>
-    {% for file in files %} {{ file }}
-    <a href="{{ file }}" download>Download</a>
-    <br />
-    {% endfor %}
+    <div class="container">
+      <h1 class="title">{{ content }}</h1>
+      <div class="nav-links">
+        {% for file in files %}
+          <a class="nav-link" href="{{ file }}" download>{{ file }}</a>
+        {% endfor %}
+      </div>
+    </div>
   </body>
 </html>

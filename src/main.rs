@@ -42,16 +42,18 @@ async fn upload_page() -> impl Responder {
 #[derive(Template)]
 #[template(path = "download.html")]
 struct DownloadTemplate {
+    content: String,
     files: Vec<String>,
 }
 
 impl DownloadTemplate {
-    fn new(files: Vec<PathBuf>) -> Self {
+    fn new(files: Vec<PathBuf>, content: String) -> Self {
         DownloadTemplate {
             files: files
                 .into_iter()
                 .map(|path| path.to_string_lossy().to_string())
                 .collect(),
+            content,
         }
     }
 }
@@ -60,7 +62,7 @@ impl DownloadTemplate {
 async fn download_page(data: web::Data<Arc<Mutex<Vec<PathBuf>>>>) -> impl Responder {
     let files_lock: MutexGuard<Vec<PathBuf>> = data.lock().unwrap();
     let files = files_lock.clone();
-    let template = DownloadTemplate::new(files);
+    let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
     HttpResponse::Ok()
         .content_type("text/html")
         .body(template.render().unwrap())

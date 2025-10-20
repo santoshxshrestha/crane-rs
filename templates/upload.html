@@ -8,12 +8,14 @@
   </head>
 
   <body>
-    <div class="container">
-      <h1>{{ content }}</h1>
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required />
-        <button type="submit">Upload</button>
-      </form>
+    <div>
+      <div class="container">
+        <h1 class="title">{{ content }}</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" required />
+          <button type="submit">Upload</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>
