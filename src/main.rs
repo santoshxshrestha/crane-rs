@@ -140,12 +140,39 @@ async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responde
     HttpResponse::Ok().body("Upload content")
 }
 
+fn copy_files_to_temp(files: Vec<PathBuf>) -> std::io::Result<()> {
+    let tmp_dir = env::temp_dir().join("crane-rs");
+
+    if let Err(e) = fs::create_dir_all(&tmp_dir) {
+        eprintln!("Failed to create directory: {}", e);
+        return Err(e);
+    };
+
+    for file in files {
+        let file_name = file
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .to_string();
+        let dest_path = tmp_dir.join(&file_name);
+        fs::copy(&file, &dest_path)?;
+    }
+    Ok(())
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let args = Args::parse();
 
     let port = args.get_port();
-    let files = Arc::new(Mutex::new(args.get_files()));
+    let files = args.get_files();
+
+    if !files.is_empty() {
+        if let Err(e) = copy_files_to_temp(files.clone()) {
+            eprintln!("Failed to copy files to temp directory: {}", e);
+            return Err(e);
+        }
+    }
 
     let local_ip = local_ip().unwrap();
     print_qr(&format!("http://{}:{}/", local_ip, port)).unwrap();
@@ -155,7 +182,6 @@ async fn main() -> std::io::Result<()> {
     }
 
     println!("Server running at http://{}:{}/", local_ip, port);
-    let cloned_files = Arc::clone(&files);
 
     HttpServer::new(move || {
         App::new()
@@ -163,7 +189,6 @@ async fn main() -> std::io::Result<()> {
             .service(upload_page)
             .service(download_page)
             .service(upload)
-            .app_data(web::Data::new(cloned_files.clone()))
             .service(Files::new("/static", "./static").show_files_listing())
     })
     .bind(format!("0.0.0.0:{}", port))?
