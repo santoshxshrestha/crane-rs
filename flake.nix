@@ -27,13 +27,7 @@
           clippy
           cargo-watch
           rustfmt
-
           openssl
-
-          nodejs
-          nodePackages.eslint
-          nodePackages.prettier
-          nodePackages.typescript-language-server
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
