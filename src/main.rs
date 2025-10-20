@@ -18,7 +18,100 @@ mod cli;
 use cli::Args;
 
 #[derive(Template)]
-#[template(path = "upload.html")]
+#[template(
+    ext = "html",
+    source = r#"
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>crane.rs - upload</title>
+    <style>
+body {
+  background: #181825;
+  color: #cdd6f4;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  background: #232336;
+  border-radius: 12px;
+  border: 1px solid #313244;
+  padding: 2rem 1.5rem;
+  max-width: 350px;
+  width: 100%;
+  text-align: center;
+}
+.title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #b4befe;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+input[type="file"] {
+  color: #cdd6f4;
+  background: #313244;
+  border: 1px solid #45475a;
+  border-radius: 6px;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+button[type="submit"] {
+  background: #313244;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button[type="submit"]:hover {
+  background: #45475a;
+}
+@media (max-width: 500px) {
+  .container {
+    padding: 1rem 0.5rem;
+    max-width: 95vw;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+  button[type="submit"] {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}
+    </style>
+
+  </head>
+
+  <body>
+    <div>
+      <div class="container">
+        <h1 class="title">{{ content }}</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" required />
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+"#
+)]
 struct UploadTemplate {
     content: String,
 }
@@ -38,7 +131,90 @@ async fn upload_page() -> impl Responder {
 }
 
 #[derive(Template)]
-#[template(path = "download.html")]
+#[template(
+    ext = "html",
+    source = r#"
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>crane.rs - download</title>
+    <style>
+
+body {
+  background: #181825;
+  color: #cdd6f4;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  background: #232336;
+  border-radius: 12px;
+  border: 1px solid #313244;
+  padding: 2rem 1.5rem;
+  max-width: 350px;
+  width: 100%;
+  text-align: center;
+}
+.title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #b4befe;
+}
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.nav-link {
+  background: #313244;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.nav-link:hover {
+  background: #45475a;
+}
+@media (max-width: 500px) {
+  .container {
+    padding: 1rem 0.5rem;
+    max-width: 95vw;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+  .nav-link {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}
+</style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">{{ content }}</h1>
+      <div class="nav-links">
+        {% for file in files %}
+          <a class="nav-link" href="{{ file.file }}" download>{{ file.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
+"#
+)]
 struct DownloadTemplate {
     content: String,
     files: Vec<FileInfo>,
@@ -98,7 +274,90 @@ async fn download_page() -> impl Responder {
 }
 
 #[derive(Template)]
-#[template(path = "index.html")]
+#[template(
+    ext = "html",
+    source = r#"
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>crane.rs - index</title>
+    <style>
+
+body {
+  background: #181825;
+  color: #cdd6f4;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  background: #232336;
+  border-radius: 12px;
+  border: 1px solid #313244;
+  padding: 2rem 1.5rem;
+  max-width: 350px;
+  width: 100%;
+  text-align: center;
+}
+.title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #b4befe;
+}
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.nav-link {
+  background: #313244;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.nav-link:hover {
+  background: #45475a;
+}
+@media (max-width: 500px) {
+  .container {
+    padding: 1rem 0.5rem;
+    max-width: 95vw;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+  .nav-link {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">{{ content }}</h1>
+      <div class="nav-links">
+        <a class="nav-link" href="/upload">Go to Upload Page</a>
+        <a class="nav-link" href="/download">Go to Download Page</a>
+      </div>
+    </div>
+  </body>
+</html>
+"#
+)]
 struct IndexTemplate {
     content: String,
 }
