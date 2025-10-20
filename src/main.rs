@@ -15,21 +15,15 @@ use walkdir::WalkDir;
 use webbrowser::open;
 
 mod cli;
+mod routes;
 mod templates;
 mod utils;
 use cli::Args;
+use routes::upload::upload_page;
 use templates::download::DownloadTemplate;
 use templates::index::IndexTemplate;
 use templates::upload::UploadTemplate;
 use utils::store::copy_files_to_temp;
-
-#[get("/upload")]
-async fn upload_page() -> impl Responder {
-    let template = UploadTemplate::new("crane-rs - upload".to_string());
-    HttpResponse::Ok()
-        .content_type("text/html")
-        .body(template.render().unwrap())
-}
 
 pub struct FileInfo {
     name: String,
