@@ -27,21 +27,8 @@ use templates::download::DownloadTemplate;
 use templates::index::IndexTemplate;
 use templates::upload::UploadTemplate;
 use utils::store::copy_files_to_temp;
-
-pub struct FileInfo {
-    name: String,
-    file: String,
-}
-impl FileInfo {
-    pub fn new(name: String, file: String) -> Self {
-        Self { name, file }
-    }
-}
-
-#[derive(MultipartForm, Debug)]
-pub struct UploadForm {
-    pub file: TempFile,
-}
+use utils::types::FileInfo;
+use utils::types::UploadForm;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
