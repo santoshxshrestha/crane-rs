@@ -70,8 +70,8 @@ h1 {
 
 .nav-link {
   display: inline-block;
-  background: linear-gradient(120deg, var(--ctp-mocha-blue) 0%, var(--ctp-mocha-mauve) 100%);
-  color: var(--ctp-mocha-base);
+  background: linear-gradient(120deg, var(--ctp-mocha-surface1) 0%, var(--ctp-mocha-mauve) 100%);
+  color: var(--ctp-mocha-text);
   border: 1px solid var(--ctp-mocha-overlay1);
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
@@ -91,7 +91,7 @@ h1 {
 }
 
 .nav-link:hover {
-  background: linear-gradient(120deg, var(--ctp-mocha-mauve) 0%, var(--ctp-mocha-blue) 100%);
+  background: linear-gradient(120deg, var(--ctp-mocha-surface2) 0%, var(--ctp-mocha-overlay1) 100%);
   color: var(--ctp-mocha-text);
   transform: translateY(-2px) scale(1.04);
 }
@@ -133,8 +133,8 @@ input[type="file"] {
 
 button[type="submit"] {
   position: relative;
-  background: linear-gradient(120deg, var(--ctp-mocha-peach) 0%, var(--ctp-mocha-yellow) 60%, var(--ctp-mocha-blue) 100%);
-  color: var(--ctp-mocha-base);
+  background: linear-gradient(120deg, var(--ctp-mocha-surface2) 0%, var(--ctp-mocha-blue) 60%, var(--ctp-mocha-mauve) 100%);
+  color: var(--ctp-mocha-text);
   border: 1px solid var(--ctp-mocha-overlay2);
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
@@ -169,7 +169,7 @@ button[type="submit"]::after {
 }
 
 button[type="submit"]:hover {
-  background: linear-gradient(120deg, var(--ctp-mocha-blue) 0%, var(--ctp-mocha-peach) 60%, var(--ctp-mocha-yellow) 100%);
+  background: linear-gradient(120deg, var(--ctp-mocha-overlay1) 0%, var(--ctp-mocha-surface2) 60%, var(--ctp-mocha-mauve) 100%);
   color: var(--ctp-mocha-text);
   border: 1px solid var(--ctp-mocha-mauve);
   box-shadow:
