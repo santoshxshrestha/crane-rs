@@ -2,7 +2,6 @@ use actix_files::Files;
 use actix_multipart::form::{MultipartForm, tempfile::TempFile};
 use actix_web::HttpResponse;
 use actix_web::Responder;
-use actix_web::web;
 use actix_web::{self, App, HttpServer, get, post};
 use askama::Template;
 use clap::Parser;
@@ -12,8 +11,7 @@ use std::env;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
-use std::sync::Arc;
-use std::sync::{Mutex, MutexGuard};
+use walkdir::WalkDir;
 use webbrowser::open;
 
 mod cli;
@@ -80,6 +78,13 @@ impl DownloadTemplate {
 async fn download_page() -> impl Responder {
     let tmp_dir = env::temp_dir().join("crane-rs");
     let mut files = Vec::new();
+
+    for entry in WalkDir::new(&tmp_dir) {
+        let entry = entry.unwrap();
+        if entry.file_type().is_file() {
+            files.push(entry.path().to_path_buf())
+        }
+    }
 
     let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
     HttpResponse::Ok()
