@@ -77,6 +77,11 @@ impl DownloadTemplate {
 #[get("/download")]
 async fn download_page() -> impl Responder {
     let tmp_dir = env::temp_dir().join("crane-rs");
+
+    if !tmp_dir.exists() {
+        return HttpResponse::NotFound().body("No files available for download");
+    }
+
     let mut files = Vec::new();
 
     for entry in WalkDir::new(&tmp_dir) {
