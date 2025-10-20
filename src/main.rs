@@ -77,9 +77,10 @@ impl DownloadTemplate {
 }
 
 #[get("/download")]
-async fn download_page(data: web::Data<Arc<Mutex<Vec<PathBuf>>>>) -> impl Responder {
-    let files_lock: MutexGuard<Vec<PathBuf>> = data.lock().unwrap();
-    let files = files_lock.clone();
+async fn download_page() -> impl Responder {
+    let tmp_dir = env::temp_dir().join("crane-rs");
+    let mut files = Vec::new();
+
     let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
     HttpResponse::Ok()
         .content_type("text/html")
