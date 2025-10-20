@@ -201,6 +201,7 @@ async fn main() -> std::io::Result<()> {
             .service(download_page)
             .service(upload)
             .service(Files::new("/static", "./static").show_files_listing())
+            .service(Files::new("/tmp/crane-rs", "/tmp/crane-rs").show_files_listing())
     })
     .bind(format!("0.0.0.0:{}", port))?
     .run()
