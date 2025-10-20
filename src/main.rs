@@ -20,6 +20,26 @@ mod cli;
 use cli::Args;
 
 #[derive(Template)]
+#[template(path = "upload.html")]
+struct UploadTemplate {
+    content: String,
+}
+
+impl UploadTemplate {
+    fn new(content: String) -> Self {
+        Self { content }
+    }
+}
+
+#[get("/upload")]
+async fn upload_page() -> impl Responder {
+    let template = UploadTemplate::new("crane-rs - upload".to_string());
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(template.render().unwrap())
+}
+
+#[derive(Template)]
 #[template(path = "download.html")]
 struct DownloadTemplate {
     files: Vec<String>,
@@ -37,7 +57,7 @@ impl DownloadTemplate {
 }
 
 #[get("/download")]
-async fn download(data: web::Data<Arc<Mutex<Vec<PathBuf>>>>) -> impl Responder {
+async fn download_page(data: web::Data<Arc<Mutex<Vec<PathBuf>>>>) -> impl Responder {
     let files_lock: MutexGuard<Vec<PathBuf>> = data.lock().unwrap();
     let files = files_lock.clone();
     let template = DownloadTemplate::new(files);
@@ -127,8 +147,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .service(index)
+            .service(upload_page)
+            .service(download_page)
             .service(upload)
-            .service(download)
             .app_data(web::Data::new(cloned_files.clone()))
             .service(Files::new("/static", "./static").show_files_listing())
     })
