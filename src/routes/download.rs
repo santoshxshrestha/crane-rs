@@ -20,7 +20,7 @@ async fn download_page() -> impl Responder {
         let entry = match entry {
             Ok(entry) => entry,
             Err(e) => {
-                eprintln!("Error reading directory entry: {}", e);
+                eprintln!("Error reading directory entry: {e}");
                 continue;
             }
         };
