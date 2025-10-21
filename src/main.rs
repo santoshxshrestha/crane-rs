@@ -53,8 +53,20 @@ async fn main() -> std::io::Result<()> {
         }
     }
 
-    let local_ip = local_ip().unwrap();
-    print_qr(&format!("http://{}:{}/", local_ip, port)).unwrap();
+    let local_ip = match local_ip() {
+        Ok(ip) => ip,
+        Err(e) => {
+            eprintln!("Failed to get local IP address: {}", e);
+            return Err(io::Error::new(
+                io::ErrorKind::Other,
+                "Failed to get local IP",
+            ));
+        }
+    };
+
+    if let Err(e) = print_qr(&format!("http://{}:{}/", local_ip, port)) {
+        eprintln!("Failed to generate QR code: {}", e);
+    }
 
     if let Err(e) = open(&format!("http://{}:{}/", local_ip, port)) {
         eprintln!("Failed to open web browser: {}", e);
