@@ -32,10 +32,19 @@ use utils::types::UploadForm;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let temp_dir = env::temp_dir().join("crane-rs");
     let args = Args::parse();
 
     let port = args.get_port();
     let files = args.get_files();
+    let nuke = args.get_nuke();
+
+    if nuke {
+        if temp_dir.exists() {
+            fs::remove_dir_all(temp_dir)?;
+            println!("Temporary directory nuked.");
+        }
+    }
 
     if !files.is_empty() {
         if let Err(e) = copy_files_to_temp(files.clone()) {

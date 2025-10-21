@@ -11,6 +11,10 @@ pub struct Args {
     /// File(s) to be shared
     #[arg(short = 'f', long)]
     pub file: Vec<PathBuf>,
+
+    /// Nuke temporary files
+    #[arg(short = 'n', long, default_value = "false")]
+    pub nuke: bool,
 }
 
 impl Args {
@@ -20,5 +24,9 @@ impl Args {
 
     pub fn get_files(&self) -> Vec<PathBuf> {
         self.file.clone()
+    }
+
+    pub fn get_nuke(&self) -> bool {
+        self.nuke
     }
 }
