@@ -92,6 +92,7 @@ padding: 1rem;
 margin-bottom: 1rem;
 font-weight: 500;
 max-height: 10vh;
+display: none;
 }
     </style>
   </head>
@@ -111,6 +112,29 @@ max-height: 10vh;
     </div>
     </div>
   </body>
+  <script>
+  const notification = document.querySelector('.status');
+  const form = document.querySelector('form[enctype="multipart/form-data"]');
+  const fileInput = form.querySelector('input[type="file"]');
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  const submitButton = document.querySelector('button[type="submit"]');
+    submitButton.addEventListener('click', () => {
+        notification.style.display = 'block';
+        notification.innerHTML = 'Uploading...';
+    });
+
+  document.addEventListener('htmx:afterSwap', (e) => {
+    if (e.target.classList.contains('status')) {
+      clearTimeout(window.notificationTimeout);
+      window.notificationTimeout = setTimeout(() => {
+        e.target.innerHTML = '';
+        e.target.style.display = 'none';
+      }, 5000);
+    }
+  });
+
+  </script>
 </html>
 "#
 )]
