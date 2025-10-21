@@ -77,15 +77,20 @@ button[type="submit"]:hover {
     padding: 0.6rem 1rem;
   }
 }
+.status {
+border-radius: 8px;
+border: 1px solid #45475a;
+padding: 1rem;
+margin-bottom: 1rem;
+font-weight: 500;
+}
     </style>
-
   </head>
 
   <body>
-    <div>
     <div class="status">
-    this is the status bar out there
     </div>
+    <div>
       <div class="container">
         <h1 class="title">{{ content }}</h1>
         <form hx-post="/upload" hx-target=".status" hx-swap="innherHTML" enctype="multipart/form-data">
