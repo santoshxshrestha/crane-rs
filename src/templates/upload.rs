@@ -9,6 +9,7 @@ use askama::Template;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>crane.rs - upload</title>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <style>
 body {
   background: #181825;
@@ -82,9 +83,12 @@ button[type="submit"]:hover {
 
   <body>
     <div>
+    <div class="status">
+    this is the status bar out there
+    </div>
       <div class="container">
         <h1 class="title">{{ content }}</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form hx-post="/upload" hx-target=".status" hx-swap="innherHTML" enctype="multipart/form-data">
           <input type="file" name="file" required />
           <button type="submit">Upload</button>
         </form>
