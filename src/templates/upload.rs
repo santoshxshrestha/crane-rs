@@ -11,12 +11,20 @@ use askama::Template;
     <title>crane.rs - upload</title>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <style>
-body {
+ body{
   background: #181825;
   color: #cdd6f4;
   font-family: 'Inter', 'Roboto', Arial, sans-serif;
   margin: 0;
   min-height: 100vh;
+  }
+
+.main {
+  background: #181825;
+  color: #cdd6f4;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,6 +91,7 @@ border: 1px solid #45475a;
 padding: 1rem;
 margin-bottom: 1rem;
 font-weight: 500;
+max-height: 10vh;
 }
     </style>
   </head>
@@ -90,6 +99,7 @@ font-weight: 500;
   <body>
     <div class="status">
     </div>
+    <div class="main">
     <div>
       <div class="container">
         <h1 class="title">{{ content }}</h1>
@@ -98,6 +108,7 @@ font-weight: 500;
           <button type="submit">Upload</button>
         </form>
       </div>
+    </div>
     </div>
   </body>
 </html>
