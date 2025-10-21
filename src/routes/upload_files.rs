@@ -43,5 +43,7 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
     if let Some(file) = form.file.file_name {
         println!("File name: {file:?}");
     }
-    HttpResponse::Ok().body(format!("File '{}' uploaded successfully ", file_name))
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(format!("File '{}' uploaded successfully ", file_name))
 }
