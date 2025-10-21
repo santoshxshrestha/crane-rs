@@ -6,7 +6,7 @@ pub fn copy_files_to_temp(files: Vec<PathBuf>) -> std::io::Result<()> {
     let tmp_dir = env::temp_dir().join("crane-rs");
 
     if let Err(e) = fs::create_dir_all(&tmp_dir) {
-        eprintln!("Failed to create directory: {}", e);
+        eprintln!("Failed to create directory: {e}");
         return Err(e);
     };
 

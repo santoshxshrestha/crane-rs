@@ -13,7 +13,7 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
     let tmp_dir = env::temp_dir();
 
     if let Err(e) = fs::create_dir_all(tmp_dir.join("crane-rs")) {
-        eprintln!("Failed to create directory: {}", e);
+        eprintln!("Failed to create directory: {e}");
         return HttpResponse::InternalServerError().body("Failed to create directory");
     }
 
@@ -28,7 +28,7 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
     let mut f = match fs::File::create(&file_path) {
         Ok(file) => file,
         Err(e) => {
-            eprintln!("Failed to create file: {}", e);
+            eprintln!("Failed to create file: {e}");
             return HttpResponse::InternalServerError().body("Failed to create file");
         }
     };
@@ -36,12 +36,12 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
     let mut temp_file = form.file.file;
 
     if let Err(e) = io::copy(&mut temp_file, &mut f) {
-        eprintln!("Failed to write file: {}", e);
+        eprintln!("Failed to write file: {e}");
         return HttpResponse::InternalServerError().body("Failed to write file");
     }
 
     if let Some(file) = form.file.file_name {
-        println!("File name: {:?}", file);
+        println!("File name: {file:?}");
     }
     HttpResponse::Ok().body("Upload content")
 }

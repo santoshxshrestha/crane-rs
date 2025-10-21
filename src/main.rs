@@ -39,16 +39,15 @@ async fn main() -> std::io::Result<()> {
     let files = args.get_files();
     let nuke = args.get_nuke();
 
-    if nuke {
-        if temp_dir.exists() {
+    if nuke
+        && temp_dir.exists() {
             fs::remove_dir_all(temp_dir)?;
             println!("Temporary directory nuked.");
         }
-    }
 
     if !files.is_empty() {
         if let Err(e) = copy_files_to_temp(files.clone()) {
-            eprintln!("Failed to copy files to temp directory: {}", e);
+            eprintln!("Failed to copy files to temp directory: {e}");
             return Err(e);
         }
     }
@@ -56,23 +55,22 @@ async fn main() -> std::io::Result<()> {
     let local_ip = match local_ip() {
         Ok(ip) => ip,
         Err(e) => {
-            eprintln!("Failed to get local IP address: {}", e);
-            return Err(io::Error::new(
-                io::ErrorKind::Other,
+            eprintln!("Failed to get local IP address: {e}");
+            return Err(io::Error::other(
                 "Failed to get local IP",
             ));
         }
     };
 
-    if let Err(e) = print_qr(&format!("http://{}:{}/", local_ip, port)) {
-        eprintln!("Failed to generate QR code: {}", e);
+    if let Err(e) = print_qr(format!("http://{local_ip}:{port}/")) {
+        eprintln!("Failed to generate QR code: {e}");
     }
 
-    if let Err(e) = open(&format!("http://{}:{}/", local_ip, port)) {
-        eprintln!("Failed to open web browser: {}", e);
+    if let Err(e) = open(&format!("http://{local_ip}:{port}/")) {
+        eprintln!("Failed to open web browser: {e}");
     }
 
-    println!("Server running at http://{}:{}/", local_ip, port);
+    println!("Server running at http://{local_ip}:{port}/");
 
     HttpServer::new(move || {
         App::new()
@@ -82,7 +80,7 @@ async fn main() -> std::io::Result<()> {
             .service(upload)
             .service(Files::new("/tmp/crane-rs", "/tmp/crane-rs").show_files_listing())
     })
-    .bind(format!("0.0.0.0:{}", port))?
+    .bind(format!("0.0.0.0:{port}"))?
     .run()
     .await
 }
