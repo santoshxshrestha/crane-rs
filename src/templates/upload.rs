@@ -118,10 +118,21 @@ display: none;
   const fileInput = form.querySelector('input[type="file"]');
   const submitButton = form.querySelector('button[type="submit"]');
 
-  const submitButton = document.querySelector('button[type="submit"]');
-    submitButton.addEventListener('click', () => {
+    // event listner in form didn't work skill issue I guess or, language issue
+    submitButton.addEventListener('click', (e) => {
+      if (!fileInput.files.length) {
+        e.preventDefault();
+        notification.style.display = 'block';
+        notification.innerHTML = 'Please select a file to upload.';
+        clearTimeout(window.notificationTimeout);
+        window.notificationTimeout = setTimeout(() => {
+          notification.innerHTML = '';
+          notification.style.display = 'none';
+        }, 5000);
+      } else {
         notification.style.display = 'block';
         notification.innerHTML = 'Uploading...';
+      }
     });
 
   document.addEventListener('htmx:afterSwap', (e) => {
