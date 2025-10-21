@@ -17,7 +17,14 @@ async fn download_page() -> impl Responder {
     let mut files = Vec::new();
 
     for entry in WalkDir::new(&tmp_dir) {
-        let entry = entry.unwrap();
+        let entry = match entry {
+            Ok(entry) => entry,
+            Err(e) => {
+                eprintln!("Error reading directory entry: {}", e);
+                continue;
+            }
+        };
+
         if entry.file_type().is_file() {
             files.push(entry.path().to_path_buf())
         }
