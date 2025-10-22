@@ -13,5 +13,6 @@ impl FileInfo {
 
 #[derive(MultipartForm, Debug)]
 pub struct UploadForm {
+    #[multipart(limit = "1000 MiB")]
     pub file: TempFile,
 }

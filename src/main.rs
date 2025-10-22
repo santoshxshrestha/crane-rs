@@ -1,4 +1,5 @@
 use actix_files::Files;
+use actix_multipart::form::MultipartFormConfig;
 use actix_multipart::form::{MultipartForm, tempfile::TempFile};
 use actix_web::HttpResponse;
 use actix_web::Responder;
@@ -75,6 +76,11 @@ async fn main() -> std::io::Result<()> {
             .service(upload_page)
             .service(download_page)
             .service(upload)
+            .app_data(
+                MultipartFormConfig::default()
+                    .total_limit(10 * 1024 * 1024 * 1024) // 10 GB
+                    .memory_limit(10 * 1024 * 1024), // 10 MB
+            )
             .service(Files::new("/tmp/crane-rs", "/tmp/crane-rs").show_files_listing())
     })
     .bind(format!("0.0.0.0:{port}"))?

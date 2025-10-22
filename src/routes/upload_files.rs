@@ -9,7 +9,7 @@ use crate::post;
 
 #[post("/upload")]
 pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
-    println!("Received upload request");
+    let start = std::time::Instant::now();
     let tmp_dir = env::temp_dir();
 
     if let Err(e) = fs::create_dir_all(tmp_dir.join("crane-rs")) {
@@ -41,8 +41,9 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
     }
 
     if let Some(file) = form.file.file_name {
-        println!("File name: {file:?}");
+        println!("File stored: {file:?}, write time: {:?}", start.elapsed());
     }
+
     HttpResponse::Ok()
         .content_type("text/html")
         .body(format!("File '{}' uploaded successfully ", file_name))
