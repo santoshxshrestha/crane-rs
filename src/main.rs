@@ -45,11 +45,11 @@ async fn main() -> std::io::Result<()> {
         println!("Temporary directory nuked.");
     }
 
-    if !files.is_empty() {
-        if let Err(e) = copy_files_to_temp(files.clone()) {
-            eprintln!("Failed to copy files to temp directory: {e}");
-            return Err(e);
-        }
+    if !files.is_empty()
+        && let Err(e) = copy_files_to_temp(files.clone())
+    {
+        eprintln!("Failed to copy files to temp directory: {e}");
+        return Err(e);
     }
 
     let local_ip = match local_ip() {
