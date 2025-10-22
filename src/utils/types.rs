@@ -4,10 +4,11 @@ use crate::TempFile;
 pub struct FileInfo {
     pub name: String,
     pub file: String,
+    pub size: String,
 }
 impl FileInfo {
-    pub fn new(name: String, file: String) -> Self {
-        Self { name, file }
+    pub fn new(name: String, file: String, size: String) -> Self {
+        Self { name, file, size }
     }
 }
 

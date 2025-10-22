@@ -79,7 +79,7 @@ body {
       <h1 class="title">{{ content }}</h1>
       <div class="nav-links">
         {% for file in files %}
-          <a class="nav-link" href="{{ file.file }}" download>{{ file.name }}</a>
+          <a class="nav-link" href="{{ file.file }}" download>{{ file.name }}-{{ file.size }}MB</a>
         {% endfor %}
       </div>
     </div>
@@ -103,8 +103,13 @@ impl DownloadTemplate {
                         .unwrap_or_default()
                         .to_string_lossy()
                         .to_string();
+                    let size = path
+                        .metadata()
+                        .map(|m| m.len() as f64 / 1_000_000 as f64)
+                        .unwrap_or(0 as f64);
+                    let size_string = format!("{:.2}", size);
                     let file = path.to_string_lossy().to_string();
-                    FileInfo::new(name, file)
+                    FileInfo::new(name, file, size_string)
                 })
                 .collect(),
             content,
