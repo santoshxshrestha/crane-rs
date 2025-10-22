@@ -33,7 +33,7 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
             );
             HttpResponse::Ok()
                 .content_type("text/html")
-                .body(format!("File '{}' uploaded successfully", file_name))
+                .body(format!("File '{file_name}' uploaded successfully"))
         }
         Err(e) => {
             eprintln!("Failed to move file: {e}");
