@@ -40,7 +40,7 @@ impl DownloadTemplate {
                     let time_ago = if minutes_ago == 0 {
                         "just now".to_string()
                     } else if minutes_ago < 60 {
-                        format!("{:.2} minutes ago", minutes_ago)
+                        format!("{minutes_ago:.2} minutes ago")
                     } else if minutes_ago > 60 && minutes_ago < 1440 {
                         format!("{:.2} hours ago", minutes_ago / 60)
                     } else {
