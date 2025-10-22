@@ -49,15 +49,98 @@ body {
   margin-top: 1.2rem;
 }
 .nav-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #313244;
   color: #cdd6f4;
   border: none;
   border-radius: 8px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1rem;
+  padding: 1.2rem 2rem;
+  font-size: 1.1rem;
   text-decoration: none;
   font-weight: 500;
   transition: background 0.2s;
+  gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  overflow: visible;
+}
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.file-meta {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.95rem;
+  color: #b4befe;
+  min-width: 0;
+  flex-shrink: 0;
+}
+.file-size, .file-time {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.container {
+  background: #232336;
+  border-radius: 12px;
+  border: 1px solid #313244;
+  padding: 2.5rem 2.5rem;
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 700px) {
+  .container {
+    padding: 1.2rem 0.5rem;
+    max-width: 98vw;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+  .nav-link {
+    font-size: 1rem;
+    padding: 0.8rem 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+  .file-name, .file-meta {
+    width: 100%;
+    white-space: normal;
+  }
+}
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.file-meta {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.95rem;
+  color: #b4befe;
+}
+.file-size, .file-time {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 .nav-link:hover {
   background: #45475a;
@@ -82,12 +165,20 @@ body {
       <h1 class="title">{{ content }}</h1>
       <div class="nav-links">
         {% for file in files %}
-          <a class="nav-link" href="{{ file.file }}" download>{{ file.name }}<br>
-           <i class="fa-solid fa-database"></i>
-          {{ file.size }}MB <br>
-        <i class="fa-solid fa-clock"></i>
-            {{ file.time }} <br>
-          </a>
+          <a class="nav-link" href="{{ file.file }}" download>
+      <span class="file-name">
+    <i class="fa-solid fa-file"></i>
+    {{ file.name }}
+  </span>
+  <span class="file-meta">
+    <span class="file-size">
+      <i class="fa-solid fa-database"></i> {{ file.size }}MB
+    </span>
+    <span class="file-time">
+      <i class="fa-solid fa-clock"></i> {{ file.time }}
+    </span>
+  </span>
+</a>
         {% endfor %}
       </div>
     </div>
