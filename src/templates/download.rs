@@ -25,9 +25,9 @@ impl DownloadTemplate {
 
                     let size = path
                         .metadata()
-                        .map(|m| m.len() as f64 / 1_000_000 as f64)
+                        .map(|m| m.len() as f64 / 1_000_000_f64)
                         .unwrap_or(0 as f64);
-                    let size_string = format!("{:.2}", size);
+                    let size_string = format!("{size:.2}");
                     let created = path
                         .metadata()
                         .and_then(|m| m.created())
@@ -40,7 +40,7 @@ impl DownloadTemplate {
                     let time_ago = if minutes_ago == 0 {
                         "just now".to_string()
                     } else if minutes_ago < 60 {
-                        format!("{} minutes ago", minutes_ago)
+                        format!("{minutes_ago} minutes ago")
                     } else if minutes_ago > 60 && minutes_ago < 1440 {
                         format!("{:.2} hours ago", minutes_ago / 60)
                     } else {
