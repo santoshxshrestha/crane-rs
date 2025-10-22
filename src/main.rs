@@ -39,11 +39,10 @@ async fn main() -> std::io::Result<()> {
     let files = args.get_files();
     let nuke = args.get_nuke();
 
-    if nuke
-        && temp_dir.exists() {
-            fs::remove_dir_all(temp_dir)?;
-            println!("Temporary directory nuked.");
-        }
+    if nuke && temp_dir.exists() {
+        fs::remove_dir_all(temp_dir)?;
+        println!("Temporary directory nuked.");
+    }
 
     if !files.is_empty() {
         if let Err(e) = copy_files_to_temp(files.clone()) {
@@ -56,9 +55,7 @@ async fn main() -> std::io::Result<()> {
         Ok(ip) => ip,
         Err(e) => {
             eprintln!("Failed to get local IP address: {e}");
-            return Err(io::Error::other(
-                "Failed to get local IP",
-            ));
+            return Err(io::Error::other("Failed to get local IP"));
         }
     };
 
