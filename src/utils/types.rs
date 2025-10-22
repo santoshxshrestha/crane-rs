@@ -5,10 +5,16 @@ pub struct FileInfo {
     pub name: String,
     pub file: String,
     pub size: String,
+    pub time: String,
 }
 impl FileInfo {
-    pub fn new(name: String, file: String, size: String) -> Self {
-        Self { name, file, size }
+    pub fn new(name: String, file: String, size: String, time: String) -> Self {
+        Self {
+            name,
+            file,
+            size,
+            time,
+        }
     }
 }
 
