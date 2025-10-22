@@ -28,6 +28,9 @@
           cargo-watch
           rustfmt
           openssl
+
+          nodejs
+          nodePackages.prettier
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
