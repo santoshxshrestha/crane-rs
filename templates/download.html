@@ -163,7 +163,7 @@
       <h1 class="title">{{ content }}</h1>
       <div class="nav-links">
         {% for file in files %}
-        <a class="nav-link" href="{{ file.file }}" download>
+        <a class="nav-link" href="{{ file.path }}" download>
           <span class="file-name">
             <i class="fa-solid fa-file"></i>
             {{ file.name }}
