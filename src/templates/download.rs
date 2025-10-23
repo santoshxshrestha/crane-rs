@@ -46,16 +46,11 @@ impl DownloadTemplate {
                                 format!("{:.2} days ago", duration as f64 / 86400_f64)
                             };
                             let path = path.to_string_lossy().to_string();
-                            return FileInfo::new(name, path, string_size, time_ago);
+                            FileInfo::new(name, path, string_size, time_ago)
                         }
                         Err(_) => {
                             let path = path.to_string_lossy().to_string();
-                            return FileInfo::new(
-                                name,
-                                path,
-                                "0.00".to_string(),
-                                "unknown".to_string(),
-                            );
+                            FileInfo::new(name, path, "0.00".to_string(), "unknown".to_string())
                         }
                     }
                 })
