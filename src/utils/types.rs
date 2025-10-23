@@ -3,15 +3,15 @@ use crate::TempFile;
 
 pub struct FileInfo {
     pub name: String,
-    pub file: String,
+    pub path: String,
     pub size: String,
     pub time: String,
 }
 impl FileInfo {
-    pub fn new(name: String, file: String, size: String, time: String) -> Self {
+    pub fn new(name: String, path: String, size: String, time: String) -> Self {
         Self {
             name,
-            file,
+            path,
             size,
             time,
         }

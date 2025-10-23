@@ -22,32 +22,36 @@ impl DownloadTemplate {
                         .unwrap_or_default()
                         .to_string_lossy()
                         .to_string();
+                    let metadata = path.metadata();
 
-                    let size = path
-                        .metadata()
-                        .map(|m| m.len() as f64 / 1_000_000_f64)
-                        .unwrap_or(0 as f64);
-                    let size_string = format!("{size:.2}");
-                    let created = path
-                        .metadata()
-                        .and_then(|m| m.created())
-                        .unwrap_or(SystemTime::now());
-                    let now = SystemTime::now();
-                    let duration = now
-                        .duration_since(created)
-                        .unwrap_or(Duration::from_secs(0));
-                    let minutes_ago = duration.as_secs() / 60;
-                    let time_ago = if minutes_ago == 0 {
-                        "just now".to_string()
-                    } else if minutes_ago < 60 {
-                        format!("{minutes_ago:.2} minutes ago")
-                    } else if minutes_ago > 60 && minutes_ago < 1440 {
-                        format!("{:.2} hours ago", minutes_ago / 60)
-                    } else {
-                        format!("{:.2} days ago", minutes_ago / 1440)
-                    };
-                    let file = path.to_string_lossy().to_string();
-                    FileInfo::new(name, file, size_string, time_ago)
+                    match metadata {
+                        Ok(ref m) => {
+                            let size = m.len() as f64 / 1_000_000_f64;
+                            let string_size = format!("{size:.2}");
+
+                            let created = m.created().unwrap_or(SystemTime::now());
+                            let now = SystemTime::now();
+                            let duration = now
+                                .duration_since(created)
+                                .unwrap_or(Duration::from_secs(0))
+                                .as_secs();
+                            let time_ago = if duration < 60 {
+                                "just now".to_string()
+                            } else if duration < 3600 {
+                                format!("{:.2} minutes ago", duration as f64 / 60_f64)
+                            } else if duration < 86400 {
+                                format!("{:.2} hours ago", duration as f64 / 3600_f64)
+                            } else {
+                                format!("{:.2} days ago", duration as f64 / 86400_f64)
+                            };
+                            let path = path.to_string_lossy().to_string();
+                            FileInfo::new(name, path, string_size, time_ago)
+                        }
+                        Err(_) => {
+                            let path = path.to_string_lossy().to_string();
+                            FileInfo::new(name, path, "0.00".to_string(), "unknown".to_string())
+                        }
+                    }
                 })
                 .collect(),
             content,
