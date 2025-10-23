@@ -1,7 +1,6 @@
 use crate::FileInfo;
 use crate::PathBuf;
 use askama::Template;
-use std::f64;
 use std::time::Duration;
 use std::time::SystemTime;
 
