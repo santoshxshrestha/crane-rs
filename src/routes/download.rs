@@ -33,5 +33,11 @@ async fn download_page() -> impl Responder {
     let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
     HttpResponse::Ok()
         .content_type("text/html")
-        .body(template.render().unwrap())
+        .body(match template.render() {
+            Ok(rendered) => rendered,
+            Err(e) => {
+                eprintln!("Error rendering template: {e}");
+                return HttpResponse::InternalServerError().body("Failed to render template");
+            }
+        })
 }
