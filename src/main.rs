@@ -2,6 +2,7 @@ use actix_files::Files;
 use actix_multipart::form::MultipartFormConfig;
 use actix_multipart::form::{MultipartForm, tempfile::TempFile};
 use actix_web::Responder;
+use actix_web::middleware::from_fn;
 use actix_web::{self, App, HttpServer, get, post};
 use actix_web::{HttpResponse, web};
 use askama::Template;
@@ -29,6 +30,8 @@ use store::copy_files_to_temp;
 mod types;
 use types::FileInfo;
 use types::UploadForm;
+mod middleware;
+use middleware::check_auth;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -78,6 +81,7 @@ async fn main() -> std::io::Result<()> {
             .service(upload)
             .service(login)
             .service(authentication)
+            .wrap(from_fn(check_auth))
             .app_data(auth.clone())
             .app_data(
                 MultipartFormConfig::default()
