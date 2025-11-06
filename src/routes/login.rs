@@ -1,8 +1,17 @@
 use crate::HttpResponse;
-use crate::LoginTemplate;
 use crate::Responder;
 use crate::Template;
 use crate::get;
+
+#[derive(Template)]
+#[template(path = "login.html")]
+pub struct LoginTemplate {}
+
+impl LoginTemplate {
+    pub fn new() -> Self {
+        LoginTemplate {}
+    }
+}
 
 #[get("/login")]
 pub async fn login() -> impl Responder {

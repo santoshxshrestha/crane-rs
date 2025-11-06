@@ -1,8 +1,18 @@
 use crate::HttpResponse;
-use crate::IndexTemplate;
 use crate::Responder;
 use crate::Template;
 use crate::get;
+
+#[derive(Template)]
+#[template(path = "index.html")]
+pub struct IndexTemplate {
+    content: String,
+}
+impl IndexTemplate {
+    pub fn new(content: String) -> Self {
+        IndexTemplate { content }
+    }
+}
 
 #[get("/")]
 async fn index() -> impl Responder {

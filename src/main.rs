@@ -17,7 +17,6 @@ use webbrowser::open;
 
 mod cli;
 mod routes;
-mod templates;
 mod utils;
 use cli::Args;
 use routes::authentication::authentication;
@@ -26,10 +25,6 @@ use routes::index::index;
 use routes::login::login;
 use routes::upload::upload_page;
 use routes::upload_files::upload;
-use templates::download::DownloadTemplate;
-use templates::index::IndexTemplate;
-use templates::login::LoginTemplate;
-use templates::upload::UploadTemplate;
 use utils::store::copy_files_to_temp;
 use utils::types::FileInfo;
 use utils::types::UploadForm;
