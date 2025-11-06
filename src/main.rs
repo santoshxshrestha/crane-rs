@@ -12,7 +12,6 @@ use std::env;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
-use std::sync::Arc;
 use walkdir::WalkDir;
 use webbrowser::open;
 
@@ -21,12 +20,15 @@ mod routes;
 mod templates;
 mod utils;
 use cli::Args;
+use routes::authentication::authentication;
 use routes::download::download_page;
 use routes::index::index;
+use routes::login::login;
 use routes::upload::upload_page;
 use routes::upload_files::upload;
 use templates::download::DownloadTemplate;
 use templates::index::IndexTemplate;
+use templates::login::LoginTemplate;
 use templates::upload::UploadTemplate;
 use utils::store::copy_files_to_temp;
 use utils::types::FileInfo;
@@ -40,7 +42,7 @@ async fn main() -> std::io::Result<()> {
     let port = args.get_port();
     let files = args.get_files();
     let nuke = args.get_nuke();
-    let auth: Arc<Option<String>> = Arc::new(args.get_auth());
+    let auth = web::Data::new(args.get_auth());
 
     if nuke && temp_dir.exists() {
         fs::remove_dir_all(temp_dir)?;
@@ -78,7 +80,9 @@ async fn main() -> std::io::Result<()> {
             .service(upload_page)
             .service(download_page)
             .service(upload)
-            .app_data(web::Data::new(Arc::clone(&auth)))
+            .service(login)
+            .service(authentication)
+            .app_data(auth.clone())
             .app_data(
                 MultipartFormConfig::default()
                     .total_limit(10 * 1024 * 1024 * 1024) // 10 GB

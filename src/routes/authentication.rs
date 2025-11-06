@@ -1,0 +1,28 @@
+use crate::HttpResponse;
+use crate::Responder;
+use crate::actix_web::web::Form;
+use crate::post;
+use crate::web;
+use serde::Deserialize;
+
+#[allow(unused)]
+#[derive(Deserialize)]
+pub struct UserPass {
+    pub password: String,
+}
+
+#[post("/authentication")]
+pub async fn authentication(
+    auth: web::Data<Option<String>>,
+    form: Form<UserPass>,
+) -> impl Responder {
+    if let Some(password) = auth.get_ref() {
+        if form.password == *password {
+            HttpResponse::Ok().body("Authentication successful")
+        } else {
+            HttpResponse::Unauthorized().body("Invalid password")
+        }
+    } else {
+        HttpResponse::Ok().body("No authentication required")
+    }
+}
