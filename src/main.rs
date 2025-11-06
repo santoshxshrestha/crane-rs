@@ -17,7 +17,6 @@ use webbrowser::open;
 
 mod cli;
 mod routes;
-mod utils;
 use cli::Args;
 use routes::authentication::authentication;
 use routes::download::download_page;
@@ -25,9 +24,10 @@ use routes::index::index;
 use routes::login::login;
 use routes::upload::upload_page;
 use routes::upload_files::upload;
-use utils::store::copy_files_to_temp;
-use utils::types::FileInfo;
-use utils::types::UploadForm;
+mod store;
+use store::copy_files_to_temp;
+mod types;
+use types::FileInfo;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
