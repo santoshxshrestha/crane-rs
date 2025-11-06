@@ -28,6 +28,7 @@ mod store;
 use store::copy_files_to_temp;
 mod types;
 use types::FileInfo;
+use types::UploadForm;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
