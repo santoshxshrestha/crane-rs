@@ -1,9 +1,9 @@
 use actix_files::Files;
 use actix_multipart::form::MultipartFormConfig;
 use actix_multipart::form::{MultipartForm, tempfile::TempFile};
-use actix_web::HttpResponse;
 use actix_web::Responder;
 use actix_web::{self, App, HttpServer, get, post};
+use actix_web::{HttpResponse, web};
 use askama::Template;
 use clap::Parser;
 use local_ip_address::local_ip;
@@ -12,6 +12,7 @@ use std::env;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
+use std::sync::Arc;
 use walkdir::WalkDir;
 use webbrowser::open;
 
@@ -39,6 +40,7 @@ async fn main() -> std::io::Result<()> {
     let port = args.get_port();
     let files = args.get_files();
     let nuke = args.get_nuke();
+    let auth: Arc<Option<String>> = Arc::new(args.get_auth());
 
     if nuke && temp_dir.exists() {
         fs::remove_dir_all(temp_dir)?;
@@ -76,6 +78,7 @@ async fn main() -> std::io::Result<()> {
             .service(upload_page)
             .service(download_page)
             .service(upload)
+            .app_data(web::Data::new(Arc::clone(&auth)))
             .app_data(
                 MultipartFormConfig::default()
                     .total_limit(10 * 1024 * 1024 * 1024) // 10 GB

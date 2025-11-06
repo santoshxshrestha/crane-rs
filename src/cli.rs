@@ -15,6 +15,10 @@ pub struct Args {
     /// Nuke temporary files
     #[arg(short = 'n', long, default_value = "false")]
     pub nuke: bool,
+
+    /// Authentication
+    #[arg(short = 'a', long = "auth", default_value = None)]
+    pub auth: Option<String>,
 }
 
 impl Args {
@@ -28,5 +32,8 @@ impl Args {
 
     pub fn get_nuke(&self) -> bool {
         self.nuke
+    }
+    pub fn get_auth(&self) -> Option<String> {
+        self.auth.clone()
     }
 }
