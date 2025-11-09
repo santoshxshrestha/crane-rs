@@ -3,6 +3,7 @@ use crate::Responder;
 use crate::actix_web::web::Form;
 use crate::post;
 use crate::web;
+use actix_web::cookie::Cookie;
 use serde::Deserialize;
 
 #[allow(unused)]
@@ -18,7 +19,9 @@ pub async fn authentication(
 ) -> impl Responder {
     if let Some(password) = auth.get_ref() {
         if form.password == *password {
-            HttpResponse::Ok().body("Authentication successful")
+            HttpResponse::Ok()
+                .cookie(Cookie::new("crane-rs", form.password.clone()))
+                .body("Authentication successful")
         } else {
             HttpResponse::Unauthorized().body("Invalid password")
         }
