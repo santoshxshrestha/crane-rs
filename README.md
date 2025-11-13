@@ -14,7 +14,39 @@ A simple, self-contained file sharing server written in Rust using the Actix-web
 
 ## Quick Start
 
-### Run with Nix (Recommended)
+## Install via Script
+
+You can install crane-rs using the provided installation script. This will automatically install Rust (if needed), clone the repository, build the project, and install the binary to `/usr/local/bin`.
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/santoshxshrestha/crane-rs/main/scripts/install.sh | bash
+```
+
+**Options:**
+- `--dry-run`    Show what would be done without making changes
+- `--repo=URL`   Use a custom repository URL
+- `-h`, `--help` Show help message
+
+After installation, you can run `crane-rs` from anywhere in your terminal.
+
+For more details about installation and uninstallation scripts, see [`scripts/README.md`](scripts/README.md).
+
+
+### Recommended: Install via Cargo
+
+You can install crane-rs directly from crates.io (or GitHub) using Cargo:
+
+```sh
+cargo install crane-rs
+```
+
+Or, to install the latest version from GitHub:
+
+```sh
+cargo install --git https://github.com/santoshxshrestha/crane-rs
+```
+
+### Run with Nix
 
 ```sh
 nix run github:santoshxshrestha/crane-rs
@@ -35,15 +67,6 @@ nix run github:santoshxshrestha/crane-rs
    ```sh
    ./target/release/crane-rs
    ```
-
-### Enable Authentication (Optional)
-
-To require users to log in with a password, start the server with the `--auth` flag:
-
-```sh
-./target/release/crane-rs --auth
-```
-You will be prompted to enter a password interactively. All users must log in with this password to access the server.
 
 ## Command-Line Options
 

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added installation and uninstallation scripts for easier setup and removal of the application.
+- Added instructions for using the installation script in the README and script/README.
+
+### Changed
+
+- Update docs and README for clarity and additional information about the installation.
+
 ## [0.1.1] - 2025-11-13
 
 ### Added
