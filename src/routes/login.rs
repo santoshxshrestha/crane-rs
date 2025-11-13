@@ -17,19 +17,15 @@ impl LoginTemplate {
 }
 
 #[get("/login")]
-pub async fn login(req: HttpRequest, auth: web::Data<Option<String>>) -> impl Responder {
-    let _template = LoginTemplate::new();
-    if let Some(password) = auth.get_ref() {
-        if let Some(c) = req.cookie("crane-rs") {
-            if c.value() == *password {
-                return HttpResponse::Ok().body("Already authenticated from cookie");
-            } else {
-                return HttpResponse::Ok().body("here loign page was supposed to be rendered");
+pub async fn login(_req: HttpRequest, _auth: web::Data<Option<String>>) -> impl Responder {
+    let template = LoginTemplate::new();
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(match template.render() {
+            Ok(rendered) => rendered,
+            Err(e) => {
+                eprintln!("Error rendering template: {e}");
+                return HttpResponse::InternalServerError().body("Failed to render template");
             }
-        } else {
-            return HttpResponse::Ok().body("here login page was supposed to be rendered");
-        }
-    } else {
-        return HttpResponse::Ok().body("here login page was supposed to be rendered");
-    }
+        })
 }

@@ -15,11 +15,22 @@ pub async fn check_auth(
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
     let args = Args::parse();
     match args.get_auth() {
-        Some(_) => {
-            let res = HttpResponse::Found()
-                .append_header(("Location", "/login"))
-                .finish();
-            return Ok(req.into_response(res));
+        Some(password) => {
+            if let Some(c) = req.cookie("crane-rs") {
+                if c.value() == password {
+                    next.call(req).await
+                } else {
+                    let res = HttpResponse::Found()
+                        .append_header(("Location", "/login"))
+                        .finish();
+                    return Ok(req.into_response(res));
+                }
+            } else {
+                let res = HttpResponse::Found()
+                    .append_header(("Location", "/login"))
+                    .finish();
+                return Ok(req.into_response(res));
+            }
         }
         None => next.call(req).await,
     }
