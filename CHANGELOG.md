@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored the way of handling the geting the metadata of the uploaded files in the download page.
 - Changed the variable names in the types.rs file for better clarity.
 - Refactored the error handling in the routes to provide more specific error messages.
+- Refactored the project structure to improve maintainability and readability.
 
 ### Fixed
 
