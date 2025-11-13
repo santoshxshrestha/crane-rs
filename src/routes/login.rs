@@ -1,6 +1,3 @@
-use actix_web::HttpRequest;
-use actix_web::web;
-
 use crate::HttpResponse;
 use crate::Responder;
 use crate::Template;
@@ -17,7 +14,7 @@ impl LoginTemplate {
 }
 
 #[get("/login")]
-pub async fn login(_req: HttpRequest, _auth: web::Data<Option<String>>) -> impl Responder {
+pub async fn login() -> impl Responder {
     let template = LoginTemplate::new();
     HttpResponse::Ok()
         .content_type("text/html")

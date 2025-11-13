@@ -17,8 +17,8 @@ pub struct Args {
     pub nuke: bool,
 
     /// Authentication
-    #[arg(short = 'a', long = "auth", default_value = None)]
-    pub auth: Option<String>,
+    #[arg(short = 'a', long = "auth", default_value = "false")]
+    pub auth: bool,
 }
 
 impl Args {
@@ -34,6 +34,12 @@ impl Args {
         self.nuke
     }
     pub fn get_auth(&self) -> Option<String> {
-        self.auth.clone()
+        if self.auth {
+            let password =
+                rpassword::prompt_password("-> Enter password for authentication: ").unwrap();
+            Some(password)
+        } else {
+            None
+        }
     }
 }

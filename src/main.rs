@@ -41,7 +41,7 @@ async fn main() -> std::io::Result<()> {
     let port = args.get_port();
     let files = args.get_files();
     let nuke = args.get_nuke();
-    let auth = web::Data::new(args.get_auth());
+    let auth = args.get_auth();
 
     if nuke && temp_dir.exists() {
         fs::remove_dir_all(temp_dir)?;
@@ -82,7 +82,7 @@ async fn main() -> std::io::Result<()> {
             .service(login)
             .service(authentication)
             .wrap(from_fn(check_auth))
-            .app_data(auth.clone())
+            .app_data(web::Data::new(auth.clone()))
             .app_data(
                 MultipartFormConfig::default()
                     .total_limit(10 * 1024 * 1024 * 1024) // 10 GB
