@@ -14,21 +14,18 @@ pub async fn check_auth(
     next: Next<actix_web::body::BoxBody>,
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
     let args = Args::parse();
+    let res = HttpResponse::Found()
+        .append_header(("Location", "/login"))
+        .finish();
     match args.get_auth() {
         Some(password) => {
             if let Some(c) = req.cookie("crane-rs") {
                 if c.value() == password {
                     next.call(req).await
                 } else {
-                    let res = HttpResponse::Found()
-                        .append_header(("Location", "/login"))
-                        .finish();
                     return Ok(req.into_response(res));
                 }
             } else {
-                let res = HttpResponse::Found()
-                    .append_header(("Location", "/login"))
-                    .finish();
                 return Ok(req.into_response(res));
             }
         }
