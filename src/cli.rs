@@ -1,5 +1,4 @@
 use clap::Parser;
-use rpassword;
 use std::path::PathBuf;
 
 #[derive(Debug, Parser)]
