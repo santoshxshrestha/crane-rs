@@ -1,4 +1,3 @@
-use crate::cli;
 use actix_web::HttpResponse;
 use actix_web::error::Error;
 use actix_web::middleware::Next;
@@ -6,8 +5,6 @@ use actix_web::{
     body::MessageBody,
     dev::{ServiceRequest, ServiceResponse},
 };
-use clap::Parser;
-use cli::Args;
 
 pub async fn check_auth(
     req: ServiceRequest,
@@ -23,11 +20,12 @@ pub async fn check_auth(
         return next.call(req).await;
     }
 
-    let args = Args::parse();
+    let password = req.app_data::<Option<String>>().unwrap();
+
     let res = HttpResponse::Found()
         .append_header(("Location", "/login"))
         .finish();
-    match args.get_auth() {
+    match password {
         Some(password) => {
             if let Some(c) = req.cookie("crane-rs") {
                 if c.value() == password {
