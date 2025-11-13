@@ -1,22 +1,24 @@
+use actix_web::HttpRequest;
+use actix_web::web;
+
 use crate::HttpResponse;
 use crate::Responder;
 use crate::Template;
 use crate::get;
 
 #[derive(Template)]
-#[template(path = "index.html")]
-pub struct IndexTemplate {
-    content: String,
-}
-impl IndexTemplate {
-    pub fn new(content: String) -> Self {
-        IndexTemplate { content }
+#[template(path = "login.html")]
+pub struct LoginTemplate {}
+
+impl LoginTemplate {
+    pub fn new() -> Self {
+        LoginTemplate {}
     }
 }
 
-#[get("/")]
-async fn index() -> impl Responder {
-    let template = IndexTemplate::new("crane-rs - index".to_string());
+#[get("/login")]
+pub async fn login(_req: HttpRequest, _auth: web::Data<Option<String>>) -> impl Responder {
+    let template = LoginTemplate::new();
     HttpResponse::Ok()
         .content_type("text/html")
         .body(match template.render() {

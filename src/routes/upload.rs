@@ -1,8 +1,18 @@
 use crate::HttpResponse;
 use crate::Responder;
-use crate::Template;
-use crate::UploadTemplate;
 use crate::get;
+use askama::Template;
+
+#[derive(Template)]
+#[template(path = "upload.html")]
+pub struct UploadTemplate {
+    content: String,
+}
+impl UploadTemplate {
+    pub fn new(content: String) -> Self {
+        Self { content }
+    }
+}
 
 #[get("/upload")]
 pub async fn upload_page() -> impl Responder {

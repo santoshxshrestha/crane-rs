@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Authentication feature to secure file uploads and downloads.
+- Login page for authentication.
+
 ### Changed
 
 - Refactored the way of handling the geting the metadata of the uploaded files in the download page.
