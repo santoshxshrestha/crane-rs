@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added dependency: `rpassword` for password hiding during creation.
 - Authentication feature to secure file uploads and downloads.
 - Login page for authentication.
 
 ### Changed
 
+- Refactored the method of getting authentication key from args.
 - Refactored the way of handling the geting the metadata of the uploaded files in the download page.
 - Changed the variable names in the types.rs file for better clarity.
 - Refactored the error handling in the routes to provide more specific error messages.

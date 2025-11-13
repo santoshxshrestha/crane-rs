@@ -22,7 +22,11 @@ pub async fn check_auth(
         .append_header(("Location", "/login"))
         .finish();
 
-    let auth = req.app_data::<web::Data<Option<String>>>().unwrap();
+    let auth = match req.app_data::<web::Data<Option<String>>>() {
+        Some(data) => data,
+        None => return next.call(req).await,
+    };
+
     if let Some(password) = auth.get_ref() {
         if let Some(c) = req.cookie("crane-rs") {
             if c.value() == password {
