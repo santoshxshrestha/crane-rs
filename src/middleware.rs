@@ -13,6 +13,16 @@ pub async fn check_auth(
     req: ServiceRequest,
     next: Next<actix_web::body::BoxBody>,
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
+    println!("Checking auth for path: {}", req.path());
+    // Don't check auth for /login path
+    if req.path() == "/login" {
+        return next.call(req).await;
+    }
+
+    if req.path() == "/authentication" {
+        return next.call(req).await;
+    }
+
     let args = Args::parse();
     let res = HttpResponse::Found()
         .append_header(("Location", "/login"))
@@ -23,10 +33,10 @@ pub async fn check_auth(
                 if c.value() == password {
                     next.call(req).await
                 } else {
-                    return Ok(req.into_response(res));
+                    Ok(req.into_response(res))
                 }
             } else {
-                return Ok(req.into_response(res));
+                Ok(req.into_response(res))
             }
         }
         None => next.call(req).await,

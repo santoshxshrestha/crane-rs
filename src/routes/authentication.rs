@@ -19,9 +19,10 @@ pub async fn authentication(
 ) -> impl Responder {
     if let Some(password) = auth.get_ref() {
         if form.password == *password {
-            HttpResponse::Ok()
+            HttpResponse::Found()
+                .append_header(("Location", "/"))
                 .cookie(Cookie::new("crane-rs", form.password.clone()))
-                .body("Authentication successful")
+                .finish()
         } else {
             HttpResponse::Unauthorized().body("Invalid password")
         }
