@@ -10,8 +10,6 @@ pub async fn check_auth(
     req: ServiceRequest,
     next: Next<actix_web::body::BoxBody>,
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
-    println!("Checking auth for path: {}", req.path());
-    // Don't check auth for /login path
     if req.path() == "/login" {
         return next.call(req).await;
     }
