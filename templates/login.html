@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>crane.rs - login</title>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <style>
       body {
         background: #181825;
@@ -76,12 +77,27 @@
           padding: 0.6rem 1rem;
         }
       }
+      .status {
+        border-radius: 8px;
+        border: 1px solid red;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        font-weight: 500;
+        max-height: 10vh;
+        display: block;
+      }
     </style>
   </head>
   <body>
+    <div class="status"></div>
     <div class="container">
       <h1 class="title">crane-rs - login</h1>
-      <form action="/authentication" method="post">
+      <form
+        hx-post="/authentication"
+        hx-target=".status"
+        hx-swap="innerHTML"
+        method="post"
+      >
         <input
           type="password"
           name="password"
@@ -92,4 +108,35 @@
       </form>
     </div>
   </body>
+  <script>
+    const notification = document.querySelector(".status");
+    const form = document.querySelector("form");
+    const passwordInput = form.querySelector('input[name="password"]');
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    document.addEventListener("htmx:responseError", (evt) => {
+      const xhr = evt.detail.xhr;
+      if (xhr.status === 401) {
+        notification.innerHTML = "Invalid password.";
+        notification.style.display = "block";
+        clearTimeout(window.notificationTimeout);
+        window.notificationTimeout = setTimeout(() => {
+          notification.innerHTML = "";
+          notification.style.display = "none";
+        }, 5000);
+        passwordInput.value = "";
+      }
+    });
+
+    document.addEventListener("htmx:afterSwap", (e) => {
+      if (e.target.classList.contains("status")) {
+        e.target.style.display = "block";
+        clearTimeout(window.notificationTimeout);
+        window.notificationTimeout = setTimeout(() => {
+          e.target.innerHTML = "";
+          e.target.style.display = "none";
+        }, 5000);
+      }
+    });
+  </script>
 </html>

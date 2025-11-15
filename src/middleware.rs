@@ -18,8 +18,9 @@ pub async fn check_auth(
         return next.call(req).await;
     }
 
-    let res = HttpResponse::Found()
+    let res = HttpResponse::SeeOther()
         .append_header(("Location", "/login"))
+        .insert_header(("HX-Redirect", "/login"))
         .finish();
 
     let auth = match req.app_data::<web::Data<Option<String>>>() {
