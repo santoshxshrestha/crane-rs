@@ -116,6 +116,14 @@
     const fileInput = form.querySelector('input[type="file"]');
     const submitButton = form.querySelector('button[type="submit"]');
 
+    document.addEventListener("htmx:afterRequest", (evt) => {
+      const xhr = evt.detail.xhr;
+      console.log(xhr.status);
+      if (xhr.status !=== 200) {
+        window.location.href = "/login";
+      }
+    });
+
     // event listener in form didn't work skill issue I guess or, language issue
     submitButton.addEventListener("click", (e) => {
       if (!fileInput.files.length) {
