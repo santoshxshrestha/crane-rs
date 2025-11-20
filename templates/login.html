@@ -114,6 +114,13 @@
     const passwordInput = form.querySelector('input[name="password"]');
     const submitButton = form.querySelector('button[type="submit"]');
 
+    document.addEventListener("htmx:afterRequest", (evt) => {
+      const xhr = evt.detail.xhr;
+      if (xhr.status === 200) {
+        window.location.href = "/";
+      }
+    });
+
     document.addEventListener("htmx:responseError", (evt) => {
       const xhr = evt.detail.xhr;
       if (xhr.status === 401) {

@@ -19,7 +19,7 @@ pub async fn authentication(
 ) -> impl Responder {
     if let Some(password) = auth.get_ref() {
         if form.password == *password {
-            HttpResponse::Found()
+            HttpResponse::SeeOther()
                 .append_header(("Location", "/"))
                 .cookie(Cookie::new("crane-rs", form.password.clone()))
                 .finish()

@@ -10,17 +10,13 @@ pub async fn check_auth(
     req: ServiceRequest,
     next: Next<actix_web::body::BoxBody>,
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
-    if req.path() == "/login" {
-        return next.call(req).await;
-    }
-
-    if req.path() == "/authentication" {
+    let path = req.path();
+    if path == "/login" || path == "/authentication" {
         return next.call(req).await;
     }
 
     let res = HttpResponse::SeeOther()
         .append_header(("Location", "/login"))
-        .insert_header(("HX-Redirect", "/login"))
         .finish();
 
     let auth = match req.app_data::<web::Data<Option<String>>>() {
