@@ -118,8 +118,7 @@
 
     document.addEventListener("htmx:afterRequest", (evt) => {
       const xhr = evt.detail.xhr;
-      console.log(xhr.status);
-      if (xhr.status !=== 200) {
+      if (xhr.status !== 200) {
         window.location.href = "/login";
       }
     });
