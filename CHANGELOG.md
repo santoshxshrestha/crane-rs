@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Changed the ui of the upload page.
 - Update docs and README for clarity and additional information about the installation.
 
 ## [0.1.1] - 2025-11-13
