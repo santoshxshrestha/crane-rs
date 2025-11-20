@@ -45,12 +45,27 @@
         margin-top: 1.2rem;
       }
       input[type="file"] {
-        color: #cdd6f4;
+        /* color: #cdd6f4; */
+        /* background: #313244; */
+        /* border: 1px solid #45475a; */
+        /* border-radius: 6px; */
+        /* font-size: 1rem; */
+        /* padding: 0.5rem; */
+        display: none;
+      }
+      button[type="button"] {
         background: #313244;
-        border: 1px solid #45475a;
-        border-radius: 6px;
+        color: #cdd6f4;
+        border: none;
+        border-radius: 8px;
+        padding: 0.7rem 1.2rem;
         font-size: 1rem;
-        padding: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      button[type="button"]:hover {
+        background: #45475a;
       }
       button[type="submit"] {
         background: #313244;
@@ -104,6 +119,8 @@
             enctype="multipart/form-data"
           >
             <input type="file" name="file" required />
+            <button type="button" onclick="document.querySelector('input[type=file]').click();">
+              Choose File
             <button type="submit">Upload</button>
           </form>
         </div>
@@ -115,6 +132,15 @@
     const form = document.querySelector('form[enctype="multipart/form-data"]');
     const fileInput = form.querySelector('input[type="file"]');
     const submitButton = form.querySelector('button[type="submit"]');
+    const inputButton = form.querySelector('button[type="button"]');
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length) {
+        inputButton.innerHTML = `File Selected: ${fileInput.files[0].name}`;
+      } else {
+        inputButton.innerHTML = "Choose File";
+      }
+    });
 
     // event listener in form didn't work skill issue I guess or, language issue
     submitButton.addEventListener("click", (e) => {
