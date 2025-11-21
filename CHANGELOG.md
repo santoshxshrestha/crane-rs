@@ -11,9 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added installation and uninstallation scripts for easier setup and removal of the application.
 - Added instructions for using the installation script in the README and script/README.
+- Added the stauts notification on the login page.
 
 ### Changed
 
+- Changed the functionality of the listners to avoid the displaying of the redirected page on the status
 - Changed the ui of the upload page.
 - Update docs and README for clarity and additional information about the installation.
 
@@ -51,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License.
 - README and project documentation.
 
-[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.2
 [0.1.1]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.1
 [0.1.0]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.0
