@@ -10,15 +10,12 @@ pub async fn check_auth(
     req: ServiceRequest,
     next: Next<actix_web::body::BoxBody>,
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
-    if req.path() == "/login" {
+    let path = req.path();
+    if path == "/login" || path == "/authentication" {
         return next.call(req).await;
     }
 
-    if req.path() == "/authentication" {
-        return next.call(req).await;
-    }
-
-    let res = HttpResponse::Found()
+    let res = HttpResponse::SeeOther()
         .append_header(("Location", "/login"))
         .finish();
 

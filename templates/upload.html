@@ -115,7 +115,7 @@
           <form
             hx-post="/upload"
             hx-target=".status"
-            hx-swap="innherHTML"
+            hx-swap="innerHTML"
             enctype="multipart/form-data"
           >
             <input type="file" name="file" required />
@@ -139,6 +139,16 @@
         inputButton.innerHTML = `File Selected: ${fileInput.files[0].name}`;
       } else {
         inputButton.innerHTML = "Choose File";
+      }
+    });
+
+    document.addEventListener("htmx:beforeSwap", (evt) => {
+      const xhr = evt.detail.xhr;
+      if (xhr.responseURL.endsWith("/login")) {
+        // Redirect to login page if not authenticated
+        // with out showing the response in the status div
+        evt.preventDefault();
+        window.location.href = "/login";
       }
     });
 
