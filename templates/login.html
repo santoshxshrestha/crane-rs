@@ -123,9 +123,12 @@
     const passwordInput = form.querySelector('input[name="password"]');
     const submitButton = form.querySelector('button[type="submit"]');
 
-    document.addEventListener("htmx:afterRequest", (evt) => {
+    document.addEventListener("htmx:beforeSwap", (evt) => {
       const xhr = evt.detail.xhr;
       if (xhr.status === 200) {
+        // Successful login, redirect to home
+        // with out shoing the response to the status div
+        evt.preventDefault();
         window.location.href = "/";
       }
     });

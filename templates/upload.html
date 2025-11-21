@@ -116,9 +116,12 @@
     const fileInput = form.querySelector('input[type="file"]');
     const submitButton = form.querySelector('button[type="submit"]');
 
-    document.addEventListener("htmx:afterRequest", (evt) => {
+    document.addEventListener("htmx:beforeSwap", (evt) => {
       const xhr = evt.detail.xhr;
-      if (xhr.status !== 200) {
+      if (xhr.responseURL.endsWith("/login")) {
+        // Redirect to login page if not authenticated
+        // with out showing the response in the status div
+        evt.preventDefault();
         window.location.href = "/login";
       }
     });
