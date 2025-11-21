@@ -88,10 +88,6 @@ pub async fn download_page() -> impl Responder {
         }
     }
 
-    if files.is_empty() {
-        return HttpResponse::NotFound().body("No files available for download");
-    }
-
     let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
 
     HttpResponse::Ok()

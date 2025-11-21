@@ -162,6 +162,7 @@
     <div class="container">
       <h1 class="title">{{ content }}</h1>
       <div class="nav-links">
+        {% if files.is_empty() %} No files available for download. {% endif %}
         {% for file in files %}
         <a class="nav-link" href="{{ file.path }}" download>
           <span class="file-name">
