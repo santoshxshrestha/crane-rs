@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the ui of the upload page.
 - Update docs and README for clarity and additional information about the installation.
 
+### Fixed
+- Recreate temp directory after --nuke so uploads/download listing keep working.
+- Return 404 when no files are available for download instead of empty page.
+- Use dynamic temp directory path in file listing (removed hard-coded path).
+- Fix responsive styling for upload page "Choose File" button.
+
 ## [0.1.1] - 2025-11-13
 
 ### Added

@@ -44,8 +44,10 @@ async fn main() -> std::io::Result<()> {
     let auth = args.get_auth();
 
     if nuke && temp_dir.exists() {
-        fs::remove_dir_all(temp_dir)?;
+        fs::remove_dir_all(&temp_dir)?;
         println!("Temporary directory nuked.");
+        // Recreate empty temp directory so uploads/listing continue working
+        fs::create_dir_all(&temp_dir)?;
     }
 
     if !files.is_empty()
@@ -73,6 +75,8 @@ async fn main() -> std::io::Result<()> {
 
     println!("Server running at http://{local_ip}:{port}/");
 
+    let server_temp_dir = temp_dir.clone();
+
     HttpServer::new(move || {
         App::new()
             .service(index)
@@ -88,7 +92,7 @@ async fn main() -> std::io::Result<()> {
                     .total_limit(10 * 1024 * 1024 * 1024) // 10 GB
                     .memory_limit(10 * 1024 * 1024), // 10 MB
             )
-            .service(Files::new("/tmp/crane-rs", "/tmp/crane-rs").show_files_listing())
+            .service(Files::new("/tmp/crane-rs", server_temp_dir.clone()).show_files_listing())
     })
     .bind(format!("0.0.0.0:{port}"))?
     .run()
