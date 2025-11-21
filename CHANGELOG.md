@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Recreate temp directory after --nuke so uploads/download listing keep working.
-- Return 404 when no files are available for download instead of empty page.
+- Show inline "No files available" message in download page template when list empty (replaces previous 404).
 - Use dynamic temp directory path in file listing (removed hard-coded path).
 - Fix responsive styling for upload page "Choose File" button.
 
