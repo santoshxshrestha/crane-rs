@@ -119,7 +119,7 @@
             hx-swap="innerHTML"
             enctype="multipart/form-data"
           >
-            <input type="file" name="file" required />
+            <input type="file" name="file" multiple required />
             <button type="button" onclick="document.querySelector('input[type=file]').click();">
               Choose File
             <button type="submit">Upload</button>
@@ -137,7 +137,8 @@
 
     fileInput.addEventListener("change", () => {
       if (fileInput.files.length) {
-        inputButton.innerHTML = `File Selected: ${fileInput.files[0].name}`;
+        const fileNames = Array.from(fileInput.files).map(file => file.name);
+        inputButton.innerHTML = `Files Selected: ${fileNames.join(", ")}`;
       } else {
         inputButton.innerHTML = "Choose File";
       }
@@ -172,7 +173,8 @@
 
     document.addEventListener("htmx:afterSwap", (e) => {
 
-      if (e.target.classList.contains("status") && !e.detail.xhr.status.responseURL.endsWith("/login")) {
+      if (e.target.classList.contains("status") && !e.detail.xhr.responseURL.endsWith("/login")) {
+        notification.style.display = "block";
         clearTimeout(window.notificationTimeout);
         window.notificationTimeout = setTimeout(() => {
           e.target.innerHTML = "";
