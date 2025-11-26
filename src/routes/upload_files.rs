@@ -16,28 +16,41 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
         return HttpResponse::InternalServerError().body("Failed to create directory");
     }
 
-    let file_name = form
+    let responses: Vec<HttpResponse> = form
         .file
-        .file_name
-        .clone()
-        .unwrap_or_else(|| "uploaded_file".to_string());
-    let file_path = tmp_dir.join(&file_name);
-
-    // Move the temp file to the target location
-    match form.file.file.persist(&file_path) {
-        Ok(_) => {
-            println!(
-                "File stored: {:?}, write time: {:?}",
-                file_name,
-                start.elapsed()
+        .into_iter()
+        .map(|f| {
+            let file_path = tmp_dir.join(
+                f.file_name
+                    .clone()
+                    .unwrap_or_else(|| "uploaded_file".to_string()),
             );
-            HttpResponse::Ok()
-                .content_type("text/html")
-                .body(format!("File '{file_name}' uploaded successfully"))
-        }
-        Err(e) => {
-            eprintln!("Failed to move file: {e}");
-            HttpResponse::InternalServerError().body("Failed to move file")
-        }
-    }
+            let file_name = f
+                .file_name
+                .clone()
+                .unwrap_or_else(|| "uploaded_file".to_string());
+
+            match f.file.persist(tmp_dir.join(&file_path)) {
+                Ok(_) => {
+                    println!(
+                        "File stored: {:?}, write time: {:?}",
+                        file_name,
+                        start.elapsed()
+                    );
+                    HttpResponse::Ok()
+                        .content_type("text/html")
+                        .body(format!("File '{}' uploaded successfully", file_name))
+                }
+                Err(e) => {
+                    eprintln!("Failed to move file: {e}");
+                    HttpResponse::InternalServerError().body("Failed to move file")
+                }
+            }
+        })
+        .collect();
+
+    responses
+        .into_iter()
+        .next()
+        .unwrap_or_else(|| HttpResponse::InternalServerError().body("No files uploaded"))
 }
