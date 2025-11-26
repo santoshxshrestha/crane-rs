@@ -20,26 +20,26 @@ pub async fn upload(MultipartForm(form): MultipartForm<UploadForm>) -> impl Resp
         .file
         .into_iter()
         .map(|f| {
-            let var = f.file.persist(
-                tmp_dir.join(
-                    &f.file_name
-                        .clone()
-                        .unwrap_or_else(|| "uploaded_file".to_string()),
-                ),
+            let file_path = tmp_dir.join(
+                f.file_name
+                    .clone()
+                    .unwrap_or_else(|| "uploaded_file".to_string()),
             );
-            match var {
+            let file_name = f
+                .file_name
+                .clone()
+                .unwrap_or_else(|| "uploaded_file".to_string());
+
+            match f.file.persist(tmp_dir.join(&file_path)) {
                 Ok(_) => {
                     println!(
                         "File stored: {:?}, write time: {:?}",
-                        &f.file_name
-                            .clone()
-                            .unwrap_or_else(|| "uploaded_file".to_string()),
+                        file_name,
                         start.elapsed()
                     );
-                    HttpResponse::Ok().content_type("text/html").body(format!(
-                        "File '{}' uploaded successfully",
-                        &f.file_name.unwrap_or_else(|| "uploaded_file".to_string())
-                    ))
+                    HttpResponse::Ok()
+                        .content_type("text/html")
+                        .body(format!("File '{}' uploaded successfully", file_name))
                 }
                 Err(e) => {
                     eprintln!("Failed to move file: {e}");
