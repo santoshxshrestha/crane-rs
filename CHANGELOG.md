@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed
 
+## [0.1.4] - 2025-12-10
+
+### Changed
+- Updated dependencies to latest versions (actix-web, actix-files, and related ecosystem packages).
+
 ## [0.1.3] - 2025-11-26
 
 ### Added
@@ -69,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License.
 - README and project documentation.
 
-[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.4
 [0.1.3]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.3
 [0.1.2]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.2
 [0.1.1]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.1
