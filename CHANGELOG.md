@@ -7,24 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+## [0.1.5] - 2025-12-14
+
 ### Changed
+
+- Updated dependencies to latest versions.
+- Updated flake.nix for latest package versions.
+- Removed the unused methods and content that was send to the templates and wrote the content directly in the templates.
+
 ### Fixed
 
 ## [0.1.4] - 2025-12-10
 
 ### Changed
+
 - Updated dependencies to latest versions (actix-web, actix-files, and related ecosystem packages).
 
 ## [0.1.3] - 2025-11-26
 
 ### Added
+
 - Support uploading multiple files in a single request.
 - Added installation and uninstallation scripts for easier setup and removal of the application.
 - Added instructions for using the installation script in the README and script/README.
 - Added the status notification on the login page.
 
 ### Changed
+
 - Refactored upload route to iterate and persist each incoming file.
 - Updated `UploadForm` to hold `Vec<TempFile>`.
 - Updated upload template to enable selecting multiple files and display list of selected filenames.
@@ -33,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update docs and README for clarity and additional information about the installation.
 
 ### Fixed
+
 - Correct htmx `afterSwap` handler to use `e.detail.xhr.responseURL`.
 - Show notification banner after successful multi-file upload.
 - Recreate temp directory after --nuke so uploads/download listing keep working.
@@ -74,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License.
 - README and project documentation.
 
-[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.5
 [0.1.4]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.4
 [0.1.3]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.3
 [0.1.2]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.2
