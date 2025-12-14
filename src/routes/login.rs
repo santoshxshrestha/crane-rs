@@ -5,17 +5,11 @@ use crate::get;
 
 #[derive(Template)]
 #[template(path = "login.html")]
-pub struct LoginTemplate {}
-
-impl LoginTemplate {
-    pub fn new() -> Self {
-        LoginTemplate {}
-    }
-}
+pub struct LoginTemplate;
 
 #[get("/login")]
 pub async fn login() -> impl Responder {
-    let template = LoginTemplate::new();
+    let template = LoginTemplate;
     HttpResponse::Ok()
         .content_type("text/html")
         .body(match template.render() {

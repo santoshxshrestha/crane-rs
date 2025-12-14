@@ -12,12 +12,11 @@ use std::time::SystemTime;
 #[derive(Template)]
 #[template(path = "download.html")]
 pub struct DownloadTemplate {
-    content: String,
     files: Vec<FileInfo>,
 }
 
 impl DownloadTemplate {
-    pub fn new(files: Vec<PathBuf>, content: String) -> Self {
+    pub fn new(files: Vec<PathBuf>) -> Self {
         DownloadTemplate {
             files: files
                 .into_iter()
@@ -59,7 +58,6 @@ impl DownloadTemplate {
                     }
                 })
                 .collect(),
-            content,
         }
     }
 }
@@ -88,7 +86,7 @@ pub async fn download_page() -> impl Responder {
         }
     }
 
-    let template = DownloadTemplate::new(files, "crane-rs - download".to_string());
+    let template = DownloadTemplate::new(files);
 
     HttpResponse::Ok()
         .content_type("text/html")

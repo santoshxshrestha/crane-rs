@@ -5,18 +5,11 @@ use askama::Template;
 
 #[derive(Template)]
 #[template(path = "upload.html")]
-pub struct UploadTemplate {
-    content: String,
-}
-impl UploadTemplate {
-    pub fn new(content: String) -> Self {
-        Self { content }
-    }
-}
+pub struct UploadTemplate;
 
 #[get("/upload")]
 pub async fn upload_page() -> impl Responder {
-    let template = UploadTemplate::new("crane-rs - upload".to_string());
+    let template = UploadTemplate;
     HttpResponse::Ok()
         .content_type("text/html")
         .body(match template.render() {

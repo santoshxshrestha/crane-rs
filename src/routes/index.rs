@@ -5,18 +5,11 @@ use crate::get;
 
 #[derive(Template)]
 #[template(path = "index.html")]
-pub struct IndexTemplate {
-    content: String,
-}
-impl IndexTemplate {
-    pub fn new(content: String) -> Self {
-        IndexTemplate { content }
-    }
-}
+pub struct IndexTemplate;
 
 #[get("/")]
 async fn index() -> impl Responder {
-    let template = IndexTemplate::new("crane-rs - index".to_string());
+    let template = IndexTemplate;
     HttpResponse::Ok()
         .content_type("text/html")
         .body(match template.render() {
