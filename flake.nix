@@ -27,16 +27,10 @@
           clippy
           cargo-watch
           rustfmt
-          openssl
-
-          nodejs
           nodePackages.prettier
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
-
-        # env.RUST_SRC_PATH =
-        #   "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
       };
       formatter = pkgs.rustfmt;
     };
