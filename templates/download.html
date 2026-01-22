@@ -30,8 +30,7 @@
         font-size: 1.1rem;
         gap: 2rem;
         width: 100%;
-        flex-wrap: nowrap;
-        overflow: visible;
+        min-width: 0;
       }
 
       .file-name {
@@ -39,6 +38,8 @@
         align-items: center;
         gap: 0.5rem;
         font-weight: 600;
+        min-width: 0;
+        flex: 1;
       }
 
       .file-meta {
@@ -46,8 +47,13 @@
         gap: 1.2rem;
         font-size: 0.95rem;
         color: var(--accent);
-        min-width: 0;
         flex-shrink: 0;
+      }
+
+      .file-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .file-size,
@@ -76,6 +82,14 @@
         .file-meta {
           width: 100%;
           white-space: normal;
+        }
+
+        .file-name {
+          overflow: visible;
+          text-overflow: unset;
+          white-space: normal;
+          overflow-wrap: anywhere;
+          word-break: break-word;
         }
       }
     </style>
