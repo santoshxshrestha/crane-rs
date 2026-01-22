@@ -183,6 +183,15 @@
         e.target.classList.contains("status") &&
         !e.detail.xhr.responseURL.endsWith("/login")
       ) {
+        const xhr = e.detail.xhr;
+        const isSuccessfulUpload =
+          xhr.responseURL.endsWith("/upload") && xhr.status >= 200 && xhr.status < 300;
+
+        if (isSuccessfulUpload) {
+          fileInput.value = "";
+          chipsContainer.innerHTML = "";
+        }
+
         notification.style.display = "block";
         clearTimeout(window.notificationTimeout);
         window.notificationTimeout = setTimeout(() => {
