@@ -93,6 +93,7 @@ async fn main() -> std::io::Result<()> {
                     .memory_limit(10 * 1024 * 1024), // 10 MB
             )
             .service(Files::new("/tmp/crane-rs", server_temp_dir.clone()).show_files_listing())
+            .service(Files::new("/static", "./static"))
     })
     .bind(format!("0.0.0.0:{port}"))?
     .run()

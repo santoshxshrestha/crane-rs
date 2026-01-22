@@ -11,7 +11,7 @@ pub async fn check_auth(
     next: Next<actix_web::body::BoxBody>,
 ) -> Result<ServiceResponse<impl MessageBody>, Error> {
     let path = req.path();
-    if path == "/login" || path == "/authentication" {
+    if path == "/login" || path == "/authentication" || path.starts_with("/static/") {
         return next.call(req).await;
     }
 

@@ -1,0 +1,149 @@
+:root {
+  --bg: #181825;
+  --fg: #cdd6f4;
+  --panel: #232336;
+  --border: #313244;
+  --border-strong: #45475a;
+  --accent: #b4befe;
+  --button: #313244;
+  --button-hover: #45475a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Inter", "Roboto", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Common centered page layout (login/upload). */
+.main {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Common centered page layout (index/download). */
+.body-center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.container {
+  background: var(--panel);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  width: min(720px, calc(100vw - 2rem));
+  margin: 1rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.nav-link {
+  background: var(--button);
+  color: var(--fg);
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.nav-link:hover {
+  background: var(--button-hover);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+input[type="password"] {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--button);
+  color: var(--fg);
+  font-size: 1rem;
+}
+
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+button {
+  background: var(--button);
+  color: var(--fg);
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: var(--button-hover);
+}
+
+.status {
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  padding: 1rem;
+  margin: 0;
+  font-weight: 500;
+  max-height: 10vh;
+  display: none;
+  width: min(720px, calc(100vw - 2rem));
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 1rem 0.75rem;
+    width: calc(100vw - 1rem);
+    margin: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .nav-link,
+  button {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}
