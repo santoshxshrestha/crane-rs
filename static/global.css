@@ -25,8 +25,10 @@ body {
 .main {
   min-height: 90vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 
 /* Common centered page layout (index/download). */
@@ -119,10 +121,12 @@ button:hover {
   border-radius: 8px;
   border: 1px solid var(--border-strong);
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 0;
   font-weight: 500;
   max-height: 10vh;
   display: none;
+  width: min(720px, calc(100vw - 2rem));
+  text-align: center;
 }
 
 @media (max-width: 500px) {
