@@ -59,13 +59,12 @@
       .file-chip-remove:hover {
         background: rgba(69, 71, 90, 0.35);
       }
-
     </style>
   </head>
 
   <body>
-    <div class="status"></div>
     <div class="main">
+      <div class="status"></div>
       <div>
         <div class="container">
           <h1 class="title">crane-rs - upload</h1>
@@ -180,8 +179,10 @@
     });
 
     document.addEventListener("htmx:afterSwap", (e) => {
-
-      if (e.target.classList.contains("status") && !e.detail.xhr.responseURL.endsWith("/login")) {
+      if (
+        e.target.classList.contains("status") &&
+        !e.detail.xhr.responseURL.endsWith("/login")
+      ) {
         notification.style.display = "block";
         clearTimeout(window.notificationTimeout);
         window.notificationTimeout = setTimeout(() => {
