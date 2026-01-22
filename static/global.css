@@ -31,9 +31,11 @@ body {
 
 /* Common centered page layout (index/download). */
 .body-center {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
 }
 
 .container {
@@ -41,8 +43,8 @@ body {
   border-radius: 12px;
   border: 1px solid var(--border);
   padding: 2rem 1.5rem;
-  max-width: 350px;
-  width: 100%;
+  width: min(720px, calc(100vw - 2rem));
+  margin: 1rem;
   text-align: center;
 }
 
@@ -125,8 +127,9 @@ button:hover {
 
 @media (max-width: 500px) {
   .container {
-    padding: 1rem 0.5rem;
-    max-width: 95vw;
+    padding: 1rem 0.75rem;
+    width: calc(100vw - 1rem);
+    margin: 0.5rem;
   }
 
   .title {

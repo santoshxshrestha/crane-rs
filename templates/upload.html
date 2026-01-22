@@ -10,6 +10,56 @@
       input[type="file"] {
         display: none;
       }
+
+      .file-picker {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0.25rem;
+      }
+
+      .file-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+
+      .file-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        max-width: 100%;
+        padding: 0.35rem 0.55rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(49, 50, 68, 0.35);
+        color: var(--fg);
+        font-size: 0.95rem;
+      }
+
+      .file-chip-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 16rem;
+      }
+
+      .file-chip-remove {
+        background: transparent;
+        border: 1px solid var(--border-strong);
+        color: var(--fg);
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        cursor: pointer;
+        line-height: 1.1;
+        font-size: 0.9rem;
+      }
+
+      .file-chip-remove:hover {
+        background: rgba(69, 71, 90, 0.35);
+      }
+
     </style>
   </head>
 
@@ -26,8 +76,19 @@
             enctype="multipart/form-data"
           >
             <input type="file" name="file" multiple required />
-            <button type="button" onclick="document.querySelector('input[type=file]').click();">
-              Choose File
+
+            <div class="file-picker">
+              <button
+                type="button"
+                class="choose-files"
+                onclick="document.querySelector('input[type=file]').click();"
+              >
+                Choose Files
+              </button>
+
+              <div class="file-chips" aria-live="polite"></div>
+            </div>
+
             <button type="submit">Upload</button>
           </form>
         </div>
@@ -39,15 +100,56 @@
     const form = document.querySelector('form[enctype="multipart/form-data"]');
     const fileInput = form.querySelector('input[type="file"]');
     const submitButton = form.querySelector('button[type="submit"]');
-    const inputButton = form.querySelector('button[type="button"]');
+    const chipsContainer = form.querySelector(".file-chips");
+
+    const syncInputFiles = (files) => {
+      const transfer = new DataTransfer();
+      files.forEach((file) => transfer.items.add(file));
+      fileInput.files = transfer.files;
+    };
+
+    const renderChips = () => {
+      chipsContainer.innerHTML = "";
+
+      const files = Array.from(fileInput.files);
+      if (!files.length) return;
+
+      for (const file of files) {
+        const chip = document.createElement("span");
+        chip.className = "file-chip";
+
+        const name = document.createElement("span");
+        name.className = "file-chip-name";
+        name.textContent = file.name;
+        name.title = file.name;
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "file-chip-remove";
+        remove.setAttribute("aria-label", `Remove ${file.name}`);
+        remove.textContent = "×";
+
+        remove.addEventListener("click", () => {
+          const remaining = Array.from(fileInput.files).filter((f) => {
+            return !(
+              f.name === file.name &&
+              f.size === file.size &&
+              f.lastModified === file.lastModified
+            );
+          });
+
+          syncInputFiles(remaining);
+          renderChips();
+        });
+
+        chip.appendChild(name);
+        chip.appendChild(remove);
+        chipsContainer.appendChild(chip);
+      }
+    };
 
     fileInput.addEventListener("change", () => {
-      if (fileInput.files.length) {
-        const fileNames = Array.from(fileInput.files).map(file => file.name);
-        inputButton.innerHTML = `Files Selected: ${fileNames.join(", ")}`;
-      } else {
-        inputButton.innerHTML = "Choose File";
-      }
+      renderChips();
     });
 
     document.addEventListener("htmx:beforeSwap", (evt) => {
