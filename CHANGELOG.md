@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.6] - 2025-01-22
+## [0.1.7] - 2065-02-10
+
+### Changed
+
+- Added the `rust-embed` for handling the static files in a more efficient way.
+- Dumped more css in `global.css` from templates.
+- Update dependencies to latest versions.
+
+## [0.1.6] - 2025-06-22
 
 ### Changed
 
@@ -92,7 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License.
 - README and project documentation.
 
-[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/santoshxshrestha/crane-rs/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.7
 [0.1.6]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.6
 [0.1.5]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.5
 [0.1.4]: https://github.com/santoshxshrestha/crane-rs/releases/tag/v0.1.4
