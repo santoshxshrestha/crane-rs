@@ -9,6 +9,7 @@ use askama::Template;
 use clap::Parser;
 use local_ip_address::local_ip;
 use qr2term::print_qr;
+use rust_embed::Embed;
 use std::env;
 use std::fs;
 use std::io;
@@ -32,6 +33,11 @@ use types::FileInfo;
 use types::UploadForm;
 mod middleware;
 use middleware::check_auth;
+
+#[derive(Embed)]
+#[folder = "$CARGO_MANIFEST_DIR/static"]
+#[prefix = "static/"]
+struct Assets;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -77,6 +83,20 @@ async fn main() -> std::io::Result<()> {
 
     let server_temp_dir = temp_dir.clone();
 
+    let css = match Assets::get("static/global.css") {
+        Some(file) => match std::str::from_utf8(&file.data) {
+            Ok(css) => css.to_string(),
+            Err(e) => {
+                eprintln!("Failed to read CSS file: {e}");
+                String::new()
+            }
+        },
+        None => {
+            eprintln!("CSS file not found in embedded assets.");
+            String::new()
+        }
+    };
+
     HttpServer::new(move || {
         App::new()
             .service(index)
@@ -87,6 +107,7 @@ async fn main() -> std::io::Result<()> {
             .service(authentication)
             .wrap(from_fn(check_auth))
             .app_data(web::Data::new(auth.clone()))
+            .app_data(web::Data::new(css.clone()))
             .app_data(
                 MultipartFormConfig::default()
                     .total_limit(10 * 1024 * 1024 * 1024) // 10 GB

@@ -19,6 +19,7 @@ clap = { version = "4.5.49", features = ["derive"] }
 local-ip-address = "0.6.5"
 qr2term = "0.3.3"
 rpassword = "7.4.0"
+rust-embed = { version = "8.11.0", features = ["interpolate-folder-path"] }
 serde = { version = "1.0.228", features = ["derive"] }
 walkdir = "2.5.0"
 webbrowser = "1.0.6"

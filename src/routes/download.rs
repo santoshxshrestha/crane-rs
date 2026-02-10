@@ -4,6 +4,7 @@ use crate::Responder;
 use crate::Template;
 use crate::WalkDir;
 use crate::get;
+use actix_web::web;
 use std::env;
 use std::path::PathBuf;
 use std::time::Duration;
@@ -13,10 +14,11 @@ use std::time::SystemTime;
 #[template(path = "download.html")]
 pub struct DownloadTemplate {
     files: Vec<FileInfo>,
+    css: String,
 }
 
 impl DownloadTemplate {
-    pub fn new(files: Vec<PathBuf>) -> Self {
+    pub fn new(files: Vec<PathBuf>, css: web::Data<String>) -> Self {
         DownloadTemplate {
             files: files
                 .into_iter()
@@ -58,12 +60,13 @@ impl DownloadTemplate {
                     }
                 })
                 .collect(),
+            css: css.get_ref().clone(),
         }
     }
 }
 
 #[get("/download")]
-pub async fn download_page() -> impl Responder {
+pub async fn download_page(css: web::Data<String>) -> impl Responder {
     let tmp_dir = env::temp_dir().join("crane-rs");
 
     if !tmp_dir.exists() {
@@ -86,7 +89,7 @@ pub async fn download_page() -> impl Responder {
         }
     }
 
-    let template = DownloadTemplate::new(files);
+    let template = DownloadTemplate::new(files, css);
 
     HttpResponse::Ok()
         .content_type("text/html")

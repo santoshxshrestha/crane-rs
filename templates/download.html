@@ -11,85 +11,50 @@
       referrerpolicy="no-referrer"
     />
     <title>crane.rs - download</title>
-    <link rel="stylesheet" href="/static/global.css" />
     <style>
-      .container {
-        padding: 2.5rem 2.5rem;
-      }
+      {{ css | safe }}
+          .nav-links {
+            width: 100%;
+          }
 
-      .nav-links {
-        width: 100%;
-      }
+          .nav-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+            font-size: 1.1rem;
+            gap: 2rem;
+            width: 100%;
+            min-width: 0;
+          }
 
-      .nav-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.2rem 2rem;
-        font-size: 1.1rem;
-        gap: 2rem;
-        width: 100%;
-        min-width: 0;
-      }
+          @media (max-width: 700px) {
+            .container {
+              padding: 1.2rem 0.5rem;
+            }
 
-      .file-name {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        min-width: 0;
-        flex: 1;
-      }
+            .nav-link {
+              font-size: 1rem;
+              padding: 0.8rem 0.5rem;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 0.7rem;
+            }
 
-      .file-meta {
-        display: flex;
-        gap: 1.2rem;
-        font-size: 0.95rem;
-        color: var(--accent);
-        flex-shrink: 0;
-      }
+            .file-name,
+            .file-meta {
+              width: 100%;
+              white-space: normal;
+            }
 
-      .file-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .file-size,
-      .file-time {
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-        min-width: 0;
-      }
-
-      @media (max-width: 700px) {
-        .container {
-          padding: 1.2rem 0.5rem;
-        }
-
-        .nav-link {
-          font-size: 1rem;
-          padding: 0.8rem 0.5rem;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.7rem;
-        }
-
-        .file-name,
-        .file-meta {
-          width: 100%;
-          white-space: normal;
-        }
-
-        .file-name {
-          overflow: visible;
-          text-overflow: unset;
-          white-space: normal;
-          overflow-wrap: anywhere;
-          word-break: break-word;
-        }
-      }
+            .file-name {
+              overflow: visible;
+              text-overflow: unset;
+              white-space: normal;
+              overflow-wrap: anywhere;
+              word-break: break-word;
+            }
+          }
     </style>
   </head>
   <body class="body-center">

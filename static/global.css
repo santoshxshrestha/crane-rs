@@ -45,7 +45,7 @@ body {
   background: var(--panel);
   border-radius: 12px;
   border: 1px solid var(--border);
-  padding: 2rem 1.5rem;
+  padding: 2.5rem 2.5rem;
   width: min(720px, calc(100vw - 2rem));
   margin: 1rem;
   text-align: center;
@@ -146,4 +146,88 @@ button:hover {
     font-size: 0.95rem;
     padding: 0.6rem 1rem;
   }
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  min-width: 0;
+  flex: 1;
+}
+
+.file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-size,
+.file-time {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.file-meta {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.95rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.file-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.file-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(49, 50, 68, 0.35);
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+
+.file-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 16rem;
+}
+
+.file-chip-remove {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  cursor: pointer;
+  line-height: 1.1;
+  font-size: 0.9rem;
+}
+
+.file-chip-remove:hover {
+  background: rgba(69, 71, 90, 0.35);
+}
+
+input[type="file"] {
+  display: none;
 }

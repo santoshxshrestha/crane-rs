@@ -1,15 +1,21 @@
 use crate::HttpResponse;
 use crate::Responder;
 use crate::get;
+use actix_web::web;
 use askama::Template;
 
 #[derive(Template)]
 #[template(path = "upload.html")]
-pub struct UploadTemplate;
+pub struct UploadTemplate {
+    css: String,
+}
 
 #[get("/upload")]
-pub async fn upload_page() -> impl Responder {
-    let template = UploadTemplate;
+pub async fn upload_page(css: web::Data<String>) -> impl Responder {
+    let template = UploadTemplate {
+        css: css.as_ref().clone(),
+    };
+
     HttpResponse::Ok()
         .content_type("text/html")
         .body(match template.render() {
